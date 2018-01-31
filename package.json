@@ -1,0 +1,25 @@
+{
+  "name": "react-theme-provider",
+  "version": "0.0.1",
+  "description": "Theme provider for react and react-naitve applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/callstack/react-theme-provider.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "theme",
+    "provider"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/callstack/react-theme-provider/issues"
+  },
+  "homepage": "https://github.com/callstack/react-theme-provider#readme"
+}
