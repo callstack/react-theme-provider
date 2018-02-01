@@ -3,7 +3,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { channel } from './ThemeProvider';
-import type { Theme } from '../types/Theme';
+import type { Theme } from './types/Theme';
 
 type State = {
   theme: Theme,

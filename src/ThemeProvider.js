@@ -3,7 +3,7 @@
 import { PureComponent, Children } from 'react';
 import PropTypes from 'prop-types';
 // import DefaultTheme from '../styles/DefaultTheme';
-import type { Theme } from '../types/Theme';
+import type { Theme } from './types/Theme';
 
 type Props = {
   children?: any,
@@ -61,15 +61,4 @@ export default class ThemeProvider extends PureComponent<Props> {
   render() {
     return Children.only(this.props.children);
   }
-}
-
-
-
-
-withAuth = (method: Promise<*>) => (params) => {
-  method(params).then(data => {
-    if(error) {
-      api.refreshToken()
-    }
-  })
 }
