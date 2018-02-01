@@ -2,7 +2,7 @@
 
 import { PureComponent, Children } from 'react';
 import PropTypes from 'prop-types';
-import DefaultTheme from '../styles/DefaultTheme';
+// import DefaultTheme from '../styles/DefaultTheme';
 import type { Theme } from '../types/Theme';
 
 type Props = {
@@ -19,7 +19,7 @@ export default class ThemeProvider extends PureComponent<Props> {
   };
 
   static defaultProps = {
-    theme: DefaultTheme,
+    theme: {}, //DefaultTheme,
   };
 
   static childContextTypes = {
