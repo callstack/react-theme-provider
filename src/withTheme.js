@@ -78,9 +78,8 @@ export default function withTheme<Props: {}>(
     _merge = (a, b) => {
       if (a && b) {
         return { ...a, ...b };
-      } else {
-        return a || b;
       }
+      return a || b;
     };
 
     _subscription: { remove: Function };
@@ -90,7 +89,9 @@ export default function withTheme<Props: {}>(
       return (
         <Comp
           {...this.props}
-          ref={c => (this._root = c)}
+          ref={c => {
+            this._root = c;
+          }}
           theme={this.state.theme}
         />
       );

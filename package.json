@@ -12,7 +12,8 @@
     "build:production": "cross-env NODE_ENV=production rollup -c",
     "build": "cross-env NODE_ENV=production rollup -c && cross-env NODE_ENV=development rollup -c",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example:web": "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
   },
   "repository": {
     "type": "git",
@@ -50,5 +51,11 @@
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-uglify": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react": "^15.3.0 || ^16.0.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0"
   }
 }
