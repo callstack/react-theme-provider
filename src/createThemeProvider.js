@@ -17,15 +17,15 @@ function createThemeProvider(defaultTheme: Theme | {}) {
       children: PropTypes.element.isRequired,
       theme: PropTypes.object,
     };
-  
+
     static defaultProps = {
       theme: defaultTheme,
     };
-  
+
     static childContextTypes = {
       [channel]: PropTypes.object,
     };
-  
+
     getChildContext() {
       return {
         [channel]: {
@@ -34,34 +34,34 @@ function createThemeProvider(defaultTheme: Theme | {}) {
         },
       };
     }
-  
+
     componentWillReceiveProps(nextProps: *) {
       if (this.props.theme !== nextProps.theme) {
         this._subscriptions.forEach(cb => cb(nextProps.theme));
       }
     }
-  
+
     _subscriptions = [];
-  
+
     _subscribe = (callback: Theme => void) => {
       this._subscriptions.push(callback);
-  
+
       const remove = () => {
         const index = this._subscriptions.indexOf(callback);
         if (index > -1) {
           this._subscriptions.splice(index, 1);
         }
       };
-  
+
       return { remove };
     };
-  
+
     _get = () => this.props.theme;
-  
+
     render() {
       return Children.only(this.props.children);
     }
-  }
+  };
 }
 
 export default createThemeProvider;
