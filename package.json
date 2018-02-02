@@ -8,9 +8,10 @@
     "flow": "flow",
     "lint": "eslint src",
     "prettier": "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
-    "build:dev": "cross-env NODE_ENV=development rollup -c",
-    "build:production": "cross-env NODE_ENV=production rollup -c",
-    "build": "cross-env NODE_ENV=production rollup -c && cross-env NODE_ENV=development rollup -c",
+    "build:standalone": "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
+    "build:babel": "babel src/ --out-dir lib/ --ignore **/__tests__",
+    "build:standalonedev": "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
+    "build": "npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "example:web": "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
@@ -32,6 +33,7 @@
   },
   "homepage": "https://github.com/callstack/react-theme-provider#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",

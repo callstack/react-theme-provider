@@ -1,11 +1,5 @@
 {
   "presets": [
-    ["env", {
-      "modules": false
-    }],
-    "react",
-    "stage-2",
-    "flow"
-  ],
-  "plugins": ["external-helpers"]
+    "./.babelrc.js"
+  ]
 }
