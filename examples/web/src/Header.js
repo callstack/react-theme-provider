@@ -9,6 +9,7 @@ const Header = ({ theme }) => (
 );
 
 const Container = styled.div`
+  box-sizing: border-box;
   width: 100%;
   color: ${props => props.textColor};
   background-color: ${props => props.background};
