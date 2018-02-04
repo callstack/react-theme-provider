@@ -32,7 +32,7 @@ To use, simply wrap your code into `ThemeProvider` component and pass your theme
 
 You could access theme data inside every component by wraping it into `withTheme` HOC. Just like this:
 
-```
+```js
 class App extends React.Component {
   render() {
     return (
@@ -43,7 +43,7 @@ class App extends React.Component {
   }
 }
 
-export withTheme(App);
+export default withTheme(App);
 ```
 
 ## `ThemeProvider`
