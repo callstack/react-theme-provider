@@ -1,10 +1,19 @@
+/* @flow */
 import React, { Component } from 'react';
+import { ThemeProvider } from 'react-theme-provider';
 import './App.css';
 import Header from './Header';
 import ThemeChanger from './ThemeChanger';
-import { ThemeProvider } from 'react-theme-provider';
 
-const themes = {
+type Theme = {
+  primaryColor: string,
+  accentColor: string,
+  backgroundColor: string,
+  textColor: string,
+  secondaryColor: string,
+};
+
+const themes: { [key: string]: Theme } = {
   default: {
     primaryColor: '#FFA72A',
     accentColor: '#458622',

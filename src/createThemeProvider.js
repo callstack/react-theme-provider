@@ -6,11 +6,10 @@ import PropTypes from 'prop-types';
 import { channel } from './constants';
 
 function createThemeProvider<T>(defaultTheme: T | {}) {
-  type Props = {
+  return class ThemeProvider<T1: T> extends PureComponent<{
     children?: any,
-    theme?: T,
-  };
-  return class ThemeProvider extends PureComponent<Props> {
+    theme?: T1,
+  }> {
     static propTypes = {
       children: PropTypes.element.isRequired,
       theme: PropTypes.object,
