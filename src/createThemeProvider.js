@@ -4,15 +4,12 @@ import { PureComponent, Children } from 'react';
 import PropTypes from 'prop-types';
 
 import { channel } from './constants';
-import type { Theme } from './types/Theme';
 
-type Props = {
-  children?: any,
-  theme?: Theme,
-};
-
-function createThemeProvider(defaultTheme: Theme | {}) {
-  return class ThemeProvider extends PureComponent<Props> {
+function createThemeProvider<T>(defaultTheme: T | {}) {
+  return class ThemeProvider<T1: T> extends PureComponent<{
+    children?: any,
+    theme?: T1,
+  }> {
     static propTypes = {
       children: PropTypes.element.isRequired,
       theme: PropTypes.object,
@@ -43,7 +40,7 @@ function createThemeProvider(defaultTheme: Theme | {}) {
 
     _subscriptions = [];
 
-    _subscribe = (callback: Theme => void) => {
+    _subscribe = (callback: T => void) => {
       this._subscriptions.push(callback);
 
       const remove = () => {

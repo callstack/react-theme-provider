@@ -3,18 +3,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { channel } from './constants';
-import type { Theme } from './types/Theme';
 
-type State = {
-  theme: Theme,
-};
-
-export default function withTheme<Props: {}>(
-  // TODO: this should be React.ComponentType<{ theme: Theme } & Props>
-  Comp: React.ComponentType<any>
-): React.ComponentType<Props> {
-  class ThemedComponent extends React.PureComponent<*, State> {
-    // $FlowFixMe
+export default function withTheme<Theme, Props: {}>(
+  Comp: React.ComponentType<Props>
+): React.ComponentType<
+  React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
+> {
+  class ThemedComponent extends React.PureComponent<*, { theme: Theme }> {
     static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
     static propTypes = {
@@ -41,8 +36,6 @@ export default function withTheme<Props: {}>(
         theme: this._merge(theme, this.props.theme),
       };
     }
-
-    state: State;
 
     componentDidMount() {
       this._subscription =
