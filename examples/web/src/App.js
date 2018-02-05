@@ -1,4 +1,5 @@
 /* @flow */
+
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-theme-provider';
 import './App.css';
@@ -30,12 +31,12 @@ const themes: { [key: string]: Theme } = {
   },
 };
 
-class App extends Component {
+class App extends Component<*, { theme: Theme }> {
   state = {
     theme: themes.default,
   };
 
-  handleThemeChange = themeName => {
+  handleThemeChange = (themeName: string) => {
     this.setState({ theme: themes[themeName] });
   };
 
