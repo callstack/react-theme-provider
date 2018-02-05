@@ -14,7 +14,7 @@
 ## Getting started
 ### Instalation
 ```
-npm install --save @callstac/react-theme-provider
+npm install --save @callstack/react-theme-provider
 ```
 or using yarn
 ```
