@@ -1,15 +1,21 @@
 /* @flow */
 
-import { PureComponent, Children } from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { channel } from './constants';
 
-function createThemeProvider<T>(defaultTheme: T | {}) {
-  return class ThemeProvider<T1: T> extends PureComponent<{
-    children?: any,
-    theme?: T1,
-  }> {
+type ThemeProviderProps<T> = {
+  children?: any,
+  theme?: T,
+};
+
+type ThemeProviderType<T> = React.ComponentType<ThemeProviderProps<T>>;
+
+function createThemeProvider<T>(defaultTheme: T): ThemeProviderType<T> {
+  return class ThemeProvider extends React.PureComponent<
+    ThemeProviderProps<T>
+  > {
     static propTypes = {
       children: PropTypes.element.isRequired,
       theme: PropTypes.object,
@@ -56,7 +62,7 @@ function createThemeProvider<T>(defaultTheme: T | {}) {
     _get = () => this.props.theme;
 
     render() {
-      return Children.only(this.props.children);
+      return React.Children.only(this.props.children);
     }
   };
 }

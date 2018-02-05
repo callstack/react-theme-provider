@@ -1,7 +1,7 @@
 /* @flow */
 
-import React, { Component } from 'react';
-import { ThemeProvider } from 'react-theme-provider';
+import * as React from 'react';
+import { createThemeProvider } from 'react-theme-provider';
 import './App.css';
 import Header from './Header';
 import ThemeChanger from './ThemeChanger';
@@ -31,7 +31,12 @@ const themes: { [key: string]: Theme } = {
   },
 };
 
-class App extends Component<*, { theme: Theme }> {
+const ThemeProvider: React.ComponentType<{
+  children?: any,
+  theme?: Theme,
+}> = createThemeProvider(themes.default);
+
+class App extends React.Component<*, { theme: Theme }> {
   state = {
     theme: themes.default,
   };
@@ -42,7 +47,15 @@ class App extends Component<*, { theme: Theme }> {
 
   render() {
     return (
-      <ThemeProvider theme={this.state.theme}>
+      <ThemeProvider
+        theme={{
+          primaryColor: '#FFA72A',
+          accentColor: '#458622',
+          backgroundColor: '#504f4d',
+          textColor: '#FFC777',
+          secondaryColor: '#252525',
+        }}
+      >
         <div>
           <Header />
           <ThemeChanger
