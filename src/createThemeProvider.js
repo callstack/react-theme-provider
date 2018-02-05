@@ -10,7 +10,7 @@ type ThemeProviderProps<T> = {
   theme?: T,
 };
 
-type ThemeProviderType<T> = React.ComponentType<ThemeProviderProps<T>>;
+export type ThemeProviderType<T> = React.ComponentType<ThemeProviderProps<T>>;
 
 function createThemeProvider<T>(defaultTheme: T): ThemeProviderType<T> {
   return class ThemeProvider extends React.PureComponent<

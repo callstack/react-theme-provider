@@ -1,6 +1,10 @@
 /* @flow */
-import ThemeProvider from './ThemeProvider';
-import withTheme from './withTheme';
-import createThemeProvider from './createThemeProvider';
+// import ThemeProvider from './ThemeProvider';
+// import withTheme from './withTheme';
+import createTheming from './createTheming';
+// import type { ThemingType } from './createTheming';
 
-export { ThemeProvider, withTheme, createThemeProvider };
+const { ThemeProvider, withTheme } = createTheming({});
+
+export { ThemeProvider, withTheme, createTheming };
+export type { ThemingType } from './createTheming';

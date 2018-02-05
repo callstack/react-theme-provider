@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withTheme } from 'react-theme-provider';
+import { withTheme } from './theming';
 
 const Header = ({ theme }) => (
-  <Container textColor={theme.textColor} background={theme.backgroundColor}>
+  <Container textColor={theme.textColor} background={theme.backgroundColor2}>
     react-theme-provider
   </Container>
 );
