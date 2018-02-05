@@ -52,7 +52,7 @@ TODO
 ## `withTheme`
 TODO
 
-## `createThemeProvider`
+## `createTheming`
 TODO
 
 ## Using with `flow`
