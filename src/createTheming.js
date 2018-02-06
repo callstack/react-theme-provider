@@ -11,8 +11,15 @@ export type ThemingType<T> = {
 };
 
 export default function createTheming<T>(defaultTheme: T): ThemingType<T> {
-  const ThemeProvider: ThemeProviderType<T> = createThemeProvider(defaultTheme);
-  const withTheme: WithThemeType<T> = createWithTheme();
+  const channelName = `${Math.random()
+    .toString(36)
+    .substr(2, 9)}$theme`;
+
+  const ThemeProvider: ThemeProviderType<T> = createThemeProvider(
+    defaultTheme,
+    channelName
+  );
+  const withTheme: WithThemeType<T> = createWithTheme(channelName);
 
   return {
     ThemeProvider,

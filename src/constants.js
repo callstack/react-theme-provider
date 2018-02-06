@@ -1,1 +1,1 @@
-export const channel = 'reat-theme-provider$theme';
+export const defaultChannel = 'reat-theme-provider$theme';

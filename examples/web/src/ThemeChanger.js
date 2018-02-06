@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withTheme } from 'react-theme-provider';
+import { withTheme } from './theming';
 
 const Header = ({ theme, themes, onChangeTheme }) => (
   <Container textColor={theme.primaryColor} background={theme.secondaryColor}>

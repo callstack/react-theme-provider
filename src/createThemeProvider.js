@@ -3,7 +3,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { channel } from './constants';
+import { defaultChannel } from './constants';
 
 type ThemeProviderProps<T> = {
   children?: any,
@@ -12,7 +12,10 @@ type ThemeProviderProps<T> = {
 
 export type ThemeProviderType<T> = React.ComponentType<ThemeProviderProps<T>>;
 
-function createThemeProvider<T>(defaultTheme: T): ThemeProviderType<T> {
+function createThemeProvider<T>(
+  defaultTheme: T,
+  channel?: string = defaultChannel
+): ThemeProviderType<T> {
   return class ThemeProvider extends React.PureComponent<
     ThemeProviderProps<T>
   > {
