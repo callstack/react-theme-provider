@@ -19,7 +19,10 @@ export default function createTheming<T>(defaultTheme: T): ThemingType<T> {
     defaultTheme,
     channelName
   );
-  const withTheme: WithThemeType<T> = createWithTheme(channelName);
+  const withTheme: WithThemeType<T> = createWithTheme(
+    ThemeProvider,
+    channelName
+  );
 
   return {
     ThemeProvider,

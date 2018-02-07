@@ -19,11 +19,6 @@ function createThemeProvider<T>(
   return class ThemeProvider extends React.PureComponent<
     ThemeProviderProps<T>
   > {
-    static propTypes = {
-      children: PropTypes.element.isRequired,
-      theme: PropTypes.object,
-    };
-
     static defaultProps = {
       theme: defaultTheme,
     };
