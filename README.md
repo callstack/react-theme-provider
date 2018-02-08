@@ -129,7 +129,7 @@ import { ThemeProvider, withTheme } from './theming';
  - Unique context key for each instance so you can use multiple `ThemeProvider` in your app without any conflicts.
 
 ## Using with `flow`
-In order to properly type your theme you have to create `ThemeProvider` using `createTheming` and type values it returns.
+In order to properly type your theme you have to create `ThemeProvider` using `createTheming` function and type the values it returns.
 
 ### example
 ```js
