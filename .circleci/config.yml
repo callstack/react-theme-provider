@@ -1,0 +1,100 @@
+aliases:
+
+  - &restore-cache
+    keys:
+      - dependencies-{{ checksum "package.json" }}
+      - dependencies-
+
+  - &restore-example-cache
+    keys:
+      - dependencies-example-{{ checksum "examples/web/package.json" }}
+      - dependencies-example
+
+  - &save-cache
+    key: dependencies-{{ checksum "package.json" }}
+    paths: node_modules
+
+  - &save-example-cache
+    key: dependencies-example-{{ checksum "examples/web/package.json" }}
+    paths: examples/web/node_modules
+
+  - &filter-only-master
+    branches:
+      only: master
+
+  - &filter-ignore-gh-pages
+    branches:
+      ignore: gh-pages
+
+  - &filter-tag
+    tags:
+      only: /v\d+\.\d+\.\d+.*/
+    branches:
+      ignore: /.*/
+
+defaults: &defaults
+  working_directory: ~/react-native-ios-kit
+  docker: 
+    - image: circleci/node:6
+
+version: 2
+jobs:
+  install-dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/react-theme-provider
+      - restore-cache: *restore-cache
+      - restore-cache: *restore-example-cache
+      - run: |
+          yarn install --ignore-scripts --frozen-lockfile
+          yarn install --ignore-scripts --frozen-lockfile --cwd ./examples/web
+      - save-cache: *save-cache
+      - save-cache: *save-example-cache
+      - persist_to_workspace:
+          root: .
+          paths: .
+  tests:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/react-theme-provider
+      - run: yarn run lint
+      - run: yarn run flow
+      - run: yarn test -- --coverage -i
+      - store_artifacts:
+          path: coverage
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/react-theme-provider
+      - run: |
+        npm run build
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/react-theme-provider
+      - run: |
+          npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+          npm publish
+workflows:
+  version: 2
+
+  build: 
+    jobs:
+      - install-dependencies
+      - tests:
+          requires:
+            - install-dependencies
+          filters: *filter-ignore-gh-pages
+      - build:
+          requires:
+            - tests
+          filters: *filter-ignore-gh-pages
+      - deploy:
+          requires: 
+            - build
+          filters: *filter-tag  
