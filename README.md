@@ -3,6 +3,11 @@
 </p>
 
 ---
+
+[![Build Status][build-badge]][build]
+[![Version][version-badge]][package]
+[![MIT License][license-badge]][license]
+
 ## About 
 `react-theme-provider` is a set of utilities help you create theming system in few easy steps.
 You can use it to provide a custom theme to customize the colors, fonts etc. 
@@ -150,3 +155,13 @@ const { ThemeProvider, withTheme }: ThemingType<Theme> = createTheming(
 
 export { ThemeProvider, withTheme };
 ```
+
+
+[build-badge]: https://img.shields.io/circleci/project/github/callstack/react-theme-provider/master.svg?style=flat-square
+[build]: https://circleci.com/gh/callstack/react-theme-provider
+[version-badge]: https://img.shields.io/npm/v/react-theme-provider.svg?style=flat-square
+[package]: https://www.npmjs.com/package/react-theme-provider
+[license-badge]: https://img.shields.io/npm/l/react-theme-provider.svg?style=flat-square
+[license]: https://opensource.org/licenses/MIT
+[chat-badge]: https://img.shields.io/badge/chat-slack-brightgreen.svg?style=flat-square&colorB=E01563
+[chat]: https://slack.callstack.com/
