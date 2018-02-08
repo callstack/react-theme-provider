@@ -70,8 +70,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/react-theme-provider
-      - run: |
-        npm run build
+      - run: yarn build
   deploy:
     <<: *defaults
     steps:
