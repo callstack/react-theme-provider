@@ -62,7 +62,6 @@ jobs:
           at: ~/react-theme-provider
       - run: yarn run lint
       - run: yarn run flow
-      - run: yarn test -- --coverage -i
       - store_artifacts:
           path: coverage
   build:
