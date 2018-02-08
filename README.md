@@ -11,7 +11,7 @@ You can use it to provide a custom theme to customize the colors, fonts etc.
  - works in react and react-native
  - `ThemeProvider` component
  - `withTheme` HOC
- - `createThemeProvider(defaultTheme)` - factory returns ThemeProvider component with default theme injected.
+ - `createTheming(defaultTheme)` - factory returns `ThemeProvider` component and `withTheme` HOC with default theme injected.
 
 ## Getting started
 ### Instalation
@@ -49,13 +49,15 @@ export default withTheme(App);
 ```
 
 ## `ThemeProvider`
-type: `React.ComponentType<{ children?: any, theme?: T }>`
+**type:** `React.ComponentType<{ children?: any, theme?: T }>`
+
+Component you have to use to provide theme to any component wrapped in `withTheme` HOC.
 
 ### props
-
+ -`theme` - your theme object
 
 ## `withTheme`
-type: `(React.ComponentType<*>) => React.ComponentType<*>`
+**type:** `(React.ComponentType<*>) => React.ComponentType<*>`
 
 Classic Higher Order Component which takes your component as an argument and inject `theme` prop with your theme into it.
 
@@ -73,12 +75,13 @@ export withTheme(App);
 ### Injected props
 It will inject below props to component:
  - `theme` - our theme object.
- - `getWrappedInstance` -  getWrappedInstance is exposed by some HOCs like react-redux's connect.
+ - `getWrappedInstance` -  exposed by some HOCs like react-redux's connect.
  Use it to get the ref to the underlying element.
- - `setNativeProps` - setNativeProps is used by `Animated` (in React Native) to set props on the native component.
+ - `setNativeProps` - used by `Animated` (in React Native) to set props on the native component.
 
 ### Injecting theme by a direct prop
 You can also override `theme` provided by `ThemeProvider` by setting `theme` prop on component wrapped in `withTheme` HOC.
+
 Just like this:
 ```js
 const Button = withTheme(({ theme }) => (
@@ -96,7 +99,7 @@ const App = () => (
 In this example Button will have green text.
 
 ## `createTheming`
-type: `<T>(defaultTheme: T) => ThemingType<T>`
+**type:** `<T>(defaultTheme: T) => ThemingType<T>`
 
 This is more advenced replacement to classic importing `ThemeProvider` and `withTheme` directly from library.
 
@@ -126,4 +129,24 @@ import { ThemeProvider, withTheme } from './theming';
  - Unique context key for each instance so you can use multiple `ThemeProvider` in your app without any conflicts.
 
 ## Using with `flow`
-TODO
+In order to properly type your theme you have to create `ThemeProvider` using `createTheming` and type values it returns.
+
+### example
+```js
+// theming.js
+import { createTheming } from 'react-theme-provider';
+
+import type { ThemingType } from 'react-theme-provider';
+
+export type Theme = {
+  primaryColor: string,
+  accentColor: string,
+  backgroundColor: string,
+};
+
+const { ThemeProvider, withTheme }: ThemingType<Theme> = createTheming(
+  themes.default
+);
+
+export { ThemeProvider, withTheme };
+```
