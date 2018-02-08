@@ -1,7 +1,6 @@
 /* @flow */
 
 import * as React from 'react';
-// import { createTheming } from 'react-theme-provider';
 import './App.css';
 import Header from './Header';
 import ThemeChanger from './ThemeChanger';
