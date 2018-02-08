@@ -33,7 +33,7 @@ aliases:
       ignore: /.*/
 
 defaults: &defaults
-  working_directory: ~/react-native-ios-kit
+  working_directory: ~/react-theme-provider
   docker: 
     - image: circleci/node:6
 
