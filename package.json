@@ -1,5 +1,5 @@
 {
-  "name": "react-theme-provider",
+  "name": "@callstack/react-theme-provider",
   "version": "0.0.1",
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",

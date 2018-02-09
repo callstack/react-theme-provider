@@ -37,7 +37,7 @@ The best way to get your bug fixed is to provide a reduced test case. Please pro
 
 ## How to Get in Touch
 
-* Callstack Open Source Slack - [#react-theme-context](https://slack.callstack.com/)
+* Callstack Open Source Slack - [#react-theme-provider](https://slack.callstack.com/)
 
 ## Code Conventions
 
@@ -45,4 +45,4 @@ We use Prettier with ESLint integration.
 
 ## License
 
-By contributing to react-theme-context, you agree that your contributions will be licensed under its **MIT** license.
+By contributing to @callstack/react-theme-provider, you agree that your contributions will be licensed under its **MIT** license.
