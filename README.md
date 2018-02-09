@@ -13,9 +13,9 @@
 You can use it to provide a custom theme to customize the colors, fonts etc. 
 
 ## Features
- - works in react and react-native
+ - works in **React** and **React Native**
  - `ThemeProvider` component
- - `withTheme` HOC
+ - `withTheme` Higher Order Component
  - `createTheming(defaultTheme)` - factory returns `ThemeProvider` component and `withTheme` HOC with default theme injected.
 
 ## Getting started
