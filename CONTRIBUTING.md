@@ -1,4 +1,4 @@
-# Contributing to react-native-ios-kit
+# Contributing to @callstack/react-theme-provider
 
 ## Code of Conduct
 
