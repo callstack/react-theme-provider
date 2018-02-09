@@ -159,7 +159,7 @@ export { ThemeProvider, withTheme };
 
 [build-badge]: https://img.shields.io/circleci/project/github/callstack/react-theme-provider/master.svg?style=flat-square
 [build]: https://circleci.com/gh/callstack/react-theme-provider
-[version-badge]: https://img.shields.io/npm/v/react-theme-provider.svg?style=flat-square
+[version-badge]: https://img.shields.io/npm/v/@callstack/react-theme-provider.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@callstack/react-theme-provider
 [license-badge]: https://img.shields.io/npm/l/react-theme-provider.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
