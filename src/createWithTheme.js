@@ -4,8 +4,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import merge from 'deepmerge';
 
-import { defaultChannel } from './constants';
-
 type withThemeRetunType<Theme, Props: {}> = React.ComponentType<
   React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
 >;
@@ -18,7 +16,7 @@ export type WithThemeType<T> = <Props: {}>(
 
 const createWithTheme = <T>(
   ThemeProvider: React.ComponentType<*>,
-  channel?: string = defaultChannel
+  channel: string
 ): WithThemeType<T> =>
   function withTheme<Props: {}>(
     Comp: React.ComponentType<Props>
