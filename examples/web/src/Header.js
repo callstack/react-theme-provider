@@ -1,8 +1,12 @@
+/* @flow */
+
 import React from 'react';
 import styled from 'styled-components';
-import { withTheme } from 'react-theme-provider';
+import { withTheme } from './theming';
 
-const Header = ({ theme }) => (
+import type { Theme } from './theming';
+
+const Header = ({ theme }: { theme: Theme }) => (
   <Container textColor={theme.textColor} background={theme.backgroundColor}>
     react-theme-provider
   </Container>

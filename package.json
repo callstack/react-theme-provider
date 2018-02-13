@@ -59,6 +59,7 @@
     "react": "^15.3.0 || ^16.0.0"
   },
   "dependencies": {
+    "deepmerge": "^2.0.1",
     "prop-types": "^15.6.0"
   }
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "flow-bin": "^0.64.0",
     "react-scripts": "1.1.0"
   },
   "dependencies": {
