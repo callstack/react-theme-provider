@@ -1,4 +1,4 @@
-# Contributing to @callstack/react-theme-provider
+# Contributing to `@callstack/react-theme-provider`
 
 ## Code of Conduct
 
@@ -33,7 +33,7 @@ After each change you have to build code using `yarn build:babel`.
 
 ## Reporting New Issues
 
-The best way to get your bug fixed is to provide a reduced test case. Please provide a public repository with a runnable example.
+The best way to get your bug fixed is to provide a reduced test case. Please provide a public repository with a runnable example if possible.
 
 ## How to Get in Touch
 
@@ -45,4 +45,4 @@ We use Prettier with ESLint integration.
 
 ## License
 
-By contributing to @callstack/react-theme-provider, you agree that your contributions will be licensed under its **MIT** license.
+By contributing to `@callstack/react-theme-provider`, you agree that your contributions will be licensed under its **MIT** license.

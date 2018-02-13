@@ -14,8 +14,8 @@ You can use it to provide a custom theme to customize the colors, fonts etc.
 
 ## Features
  - works in **React** and **React Native**
- - `ThemeProvider` component
- - `withTheme` Higher Order Component
+ - `ThemeProvider` - component
+ - `withTheme` - Higher Order Component
  - `createTheming(defaultTheme)` - factory returns `ThemeProvider` component and `withTheme` HOC with default theme injected.
 
 ## Getting started
@@ -78,7 +78,7 @@ export withTheme(App);
 ```
 
 ### Injected props
-It will inject below props to component:
+It will inject following props to component:
  - `theme` - our theme object.
  - `getWrappedInstance` -  exposed by some HOCs like react-redux's connect.
  Use it to get the ref to the underlying element.
