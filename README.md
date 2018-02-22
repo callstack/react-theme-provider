@@ -136,30 +136,6 @@ export { ThemeProvider, withTheme };
 import { ThemeProvider, withTheme } from './theming';
 ```
 
-## Using it with `flow`
-In order to properly type your theme you have to create `ThemeProvider` using `createTheming` function and type the values it returns.
-
-### example
-```js
-// theming.js
-import { createTheming } from '@callstack/react-theme-provider';
-
-import type { ThemingType } from '@callstack/react-theme-provider';
-
-export type Theme = {
-  primaryColor: string,
-  accentColor: string,
-  backgroundColor: string,
-};
-
-const { ThemeProvider, withTheme }: ThemingType<Theme> = createTheming(
-  themes.default
-);
-
-export { ThemeProvider, withTheme };
-```
-
-
 [build-badge]: https://img.shields.io/circleci/project/github/callstack/react-theme-provider/master.svg?style=flat-square
 [build]: https://circleci.com/gh/callstack/react-theme-provider
 [version-badge]: https://img.shields.io/npm/v/@callstack/react-theme-provider.svg?style=flat-square
