@@ -8,7 +8,7 @@ import type { Theme } from './theming';
 
 const Header = ({ theme }: { theme: Theme }) => (
   <Container textColor={theme.textColor} background={theme.backgroundColor}>
-    react-theme-provider
+    @callstack/react-theme-provider
   </Container>
 );
 
