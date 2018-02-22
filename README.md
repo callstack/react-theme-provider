@@ -136,7 +136,7 @@ export { ThemeProvider, withTheme };
 import { ThemeProvider, withTheme } from './theming';
 ```
 
-## Using with `flow`
+## Using it with `flow`
 In order to properly type your theme you have to create `ThemeProvider` using `createTheming` function and type the values it returns.
 
 ### example
