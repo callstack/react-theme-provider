@@ -6,7 +6,11 @@ const Header = ({ theme, themes, onChangeTheme }) => (
   <Container textColor={theme.primaryColor} background={theme.secondaryColor}>
     CHANGE THEME:{' '}
     <select onChange={e => onChangeTheme(e.target.value)}>
-      {themes.map(themeName => <option value={themeName}>{themeName}</option>)}
+      {themes.map(themeName => (
+        <option key={themeName} value={themeName}>
+          {themeName}
+        </option>
+      ))}
     </select>
   </Container>
 );

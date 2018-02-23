@@ -136,6 +136,8 @@ export { ThemeProvider, withTheme };
 import { ThemeProvider, withTheme } from './theming';
 ```
 
+##  TODO: add gotchas etc, rn paper
+
 [build-badge]: https://img.shields.io/circleci/project/github/callstack/react-theme-provider/master.svg?style=flat-square
 [build]: https://circleci.com/gh/callstack/react-theme-provider
 [version-badge]: https://img.shields.io/npm/v/@callstack/react-theme-provider.svg?style=flat-square

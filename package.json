@@ -7,25 +7,25 @@
   "scripts": {
     "flow": "flow",
     "lint": "eslint src",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
-    "build:standalone": "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
+    "prettier":
+      "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
+    "build:standalone":
+      "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
     "build:babel": "babel src/ --out-dir lib/ --ignore **/__tests__",
-    "build:standalonedev": "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
-    "build": "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
+    "build:standalonedev":
+      "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
+    "build":
+      "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
+    "test": "jest",
+    "example":
+      "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/callstack/react-theme-provider.git"
   },
-  "keywords": [
-    "react",
-    "react-native",
-    "theme",
-    "provider"
-  ],
+  "keywords": ["react", "react-native", "theme", "provider"],
   "author": "",
   "license": "MIT",
   "bugs": {
@@ -44,8 +44,10 @@
     "eslint": "^4.16.0",
     "eslint-config-callstack-io": "^1.1.1",
     "flow-bin": "^0.63.0",
+    "jest": "^22.4.0",
     "prettier": "^1.7.4",
     "react": "^16.0.0",
+    "react-dom": "^16.2.0",
     "rollup": "^0.55.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.3.0",
@@ -58,7 +60,13 @@
     "react": "^15.3.0 || ^16.0.0"
   },
   "dependencies": {
-    "deepmerge": "^2.0.1",
-    "prop-types": "^15.6.0"
+    "hoist-non-react-statics": "^2.5.0",
+    "prop-types": "^15.6.0",
+    "lodash": "^4.17.5"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   }
 }
