@@ -18,8 +18,7 @@
       "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
     "test": "jest",
-    "example":
-      "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
+    "example": "yarn link && cd examples/web && yarn link @callstack/react-theme-provider && yarn start"
   },
   "repository": {
     "type": "git",
