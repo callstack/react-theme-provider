@@ -1,7 +1,7 @@
 /* @flow */
-import { createTheming } from 'react-theme-provider';
+import { createTheming } from '@callstack/react-theme-provider';
 
-import type { ThemingType } from 'react-theme-provider';
+import type { ThemingType } from '@callstack/react-theme-provider';
 
 export type Theme = {
   primaryColor: string,

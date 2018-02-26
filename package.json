@@ -13,8 +13,8 @@
     "build:standalonedev": "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
     "build": "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "yarn link && cd examples/web && yarn link react-theme-provider && yarn start"
+    "test": "jest",
+    "example": "yarn link && cd examples/web && yarn link @callstack/react-theme-provider && yarn start"
   },
   "repository": {
     "type": "git",
@@ -44,8 +44,10 @@
     "eslint": "^4.16.0",
     "eslint-config-callstack-io": "^1.1.1",
     "flow-bin": "^0.63.0",
+    "jest": "^22.4.0",
     "prettier": "^1.7.4",
     "react": "^16.0.0",
+    "react-dom": "^16.2.0",
     "rollup": "^0.55.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.3.0",
@@ -58,7 +60,14 @@
     "react": "^15.3.0 || ^16.0.0"
   },
   "dependencies": {
-    "deepmerge": "^2.0.1",
+    "hoist-non-react-statics": "^2.5.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.merge": "^4.6.1",
     "prop-types": "^15.6.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   }
 }

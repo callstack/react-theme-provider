@@ -2,13 +2,20 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import merge from 'deepmerge';
+import merge from 'lodash.merge';
+import isEqual from 'lodash.isequal';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 type withThemeRetunType<Theme, Props: {}> = React.ComponentType<
   React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
 >;
 
-const isClassComponent = (Component: Function) => !!Component.prototype.render;
+const isClassComponent = (Component: Function) =>
+  Boolean(
+    Component &&
+      Component.prototype &&
+      typeof Component.prototype.render === 'function'
+  );
 
 export type WithThemeType<T> = <Props: {}>(
   Comp: React.ComponentType<Props>
@@ -58,7 +65,7 @@ const createWithTheme = <T>(
       }
 
       componentWillReceiveProps(nextProps: *) {
-        if (this.props.theme !== nextProps.theme) {
+        if (!isEqual(this.props.theme, nextProps.theme)) {
           this.setState({
             theme: this._merge(
               this.context[channel] && this.context[channel].get(),
@@ -75,7 +82,9 @@ const createWithTheme = <T>(
       _merge = (theme: T, props: *) =>
         // Only merge if both theme from context and props are present
         // Avoiding unnecessary merge allows us to check equality by reference
-        theme && props.theme ? merge(theme, props.theme) : theme || props.theme;
+        theme && props.theme
+          ? merge({}, theme, props.theme)
+          : theme || props.theme;
 
       _subscription: { remove: Function };
       _root: any;
@@ -134,23 +143,7 @@ const createWithTheme = <T>(
       }
     }
 
-    // This is ugly, but we need to hoist static properties manually
-    for (const prop in Comp) {
-      if (prop !== 'displayName' && prop !== 'contextTypes') {
-        if (prop === 'propTypes') {
-          // Only the underlying component will receive the theme prop
-          /* $FlowFixMe */
-          const { theme, ...propTypes } = Comp[prop]; // eslint-disable-line no-shadow, no-unused-vars
-          /* $FlowFixMe */
-          ThemedComponent[prop] = propTypes;
-        } else {
-          /* $FlowFixMe */
-          ThemedComponent[prop] = Comp[prop];
-        }
-      }
-    }
-
-    return ThemedComponent;
+    return hoistNonReactStatics(ThemedComponent, Comp);
   };
 
 export default createWithTheme;

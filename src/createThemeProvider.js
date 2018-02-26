@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash.isequal';
 
 type ThemeProviderProps<T> = {
   children?: any,
@@ -35,7 +36,7 @@ function createThemeProvider<T>(
     }
 
     componentWillReceiveProps(nextProps: *) {
-      if (this.props.theme !== nextProps.theme) {
+      if (!isEqual(this.props.theme, nextProps.theme)) {
         this._subscriptions.forEach(cb => cb(nextProps.theme));
       }
     }
@@ -58,7 +59,7 @@ function createThemeProvider<T>(
     _get = () => this.props.theme;
 
     render() {
-      return React.Children.only(this.props.children);
+      return this.props.children;
     }
   };
 }
