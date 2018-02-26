@@ -65,7 +65,7 @@ const createWithTheme = <T>(
       }
 
       componentWillReceiveProps(nextProps: *) {
-        if (isEqual(this.props.theme, nextProps.theme)) {
+        if (!isEqual(this.props.theme, nextProps.theme)) {
           this.setState({
             theme: this._merge(
               this.context[channel] && this.context[channel].get(),

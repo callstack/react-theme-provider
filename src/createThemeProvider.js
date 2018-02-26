@@ -36,7 +36,7 @@ function createThemeProvider<T>(
     }
 
     componentWillReceiveProps(nextProps: *) {
-      if (isEqual(this.props.theme, nextProps.theme)) {
+      if (!isEqual(this.props.theme, nextProps.theme)) {
         this._subscriptions.forEach(cb => cb(nextProps.theme));
       }
     }
