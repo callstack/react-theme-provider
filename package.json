@@ -7,15 +7,11 @@
   "scripts": {
     "flow": "flow",
     "lint": "eslint src",
-    "prettier":
-      "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
-    "build:standalone":
-      "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
+    "build:standalone": "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
     "build:babel": "babel src/ --out-dir lib/ --ignore **/__tests__",
-    "build:standalonedev":
-      "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
-    "build":
-      "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
+    "build:standalonedev": "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
+    "build": "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
     "test": "jest",
     "example": "yarn link && cd examples/web && yarn link @callstack/react-theme-provider && yarn start"
@@ -24,7 +20,12 @@
     "type": "git",
     "url": "git+https://github.com/callstack/react-theme-provider.git"
   },
-  "keywords": ["react", "react-native", "theme", "provider"],
+  "keywords": [
+    "react",
+    "react-native",
+    "theme",
+    "provider"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
@@ -60,8 +61,9 @@
   },
   "dependencies": {
     "hoist-non-react-statics": "^2.5.0",
-    "prop-types": "^15.6.0",
-    "lodash": "^4.17.5"
+    "lodash.isequal": "^4.5.0",
+    "lodash.merge": "^4.6.1",
+    "prop-types": "^15.6.0"
   },
   "jest": {
     "moduleNameMapper": {

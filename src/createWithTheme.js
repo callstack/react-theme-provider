@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import merge from 'lodash/merge';
-import isEqual from 'lodash/isequal';
+import merge from 'lodash.merge';
+import isEqual from 'lodash.isequal';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 type withThemeRetunType<Theme, Props: {}> = React.ComponentType<
