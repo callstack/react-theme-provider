@@ -136,8 +136,23 @@ export { ThemeProvider, withTheme };
 import { ThemeProvider, withTheme } from './theming';
 ```
 
-## Gotchas
+## Applying a custom theme to a component
+If you want to change the theme for a certain component, you can directly pass the theme prop to the component. The theme passed as the prop is merged with the theme from the Provider.
 
+```js
+import * as React from 'react';
+import MyButton from './MyButton';
+
+export default function ButtonExample() {
+  return (
+    <MyButton theme={{ roundness: 3 }}>
+      Press me
+    </MyButton>
+  );
+}
+```
+
+## Gotchas
 The `ThemeProvider` exposes the theme to the components via [React's context API](https://reactjs.org/docs/context.html), 
 which means that the component must be in the same tree as the `ThemeProvider`. Some React Native components will render a 
 different tree such as a `Modal`, in which case the components inside the `Modal` won't be able to access the theme. The work 
