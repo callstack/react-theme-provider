@@ -1,7 +1,7 @@
 [ignore]
 .*/dist/.*
 .*/examples/.*
-.*/lib/.*
+lib/.*
 
 [include]
 

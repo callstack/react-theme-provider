@@ -6,7 +6,7 @@ import type { Context } from 'create-react-context';
 
 type ThemeProviderProps<T> = {
   children?: any,
-  theme?: T,
+  theme: T,
 };
 
 export type ThemeProviderType<T> = React.ComponentType<ThemeProviderProps<T>>;
