@@ -6,10 +6,6 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import type { Context } from 'create-react-context';
 
-type withThemeRetunType<Theme, Props: {}> = React.ComponentType<
-  React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
->;
-
 const REACT_METHODS = [
   'autobind',
   'childContextTypes',
@@ -37,9 +33,13 @@ const REACT_METHODS = [
 
 const isClassComponent = (Component: Function) => !!Component.prototype.render;
 
+type withThemeReturnType<Theme, Props: {}> = React.ComponentType<
+  React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
+>;
+
 export type WithThemeType<T> = <Props: {}>(
   Comp: React.ComponentType<Props>
-) => withThemeRetunType<T, Props>;
+) => withThemeReturnType<T, Props>;
 
 const createWithTheme = <T>(
   ThemeProvider: React.ComponentType<*>,
@@ -47,7 +47,7 @@ const createWithTheme = <T>(
 ): WithThemeType<T> =>
   function withTheme<Props: {}>(
     Comp: React.ComponentType<Props>
-  ): React.ComponentType<$Diff<Props, { theme: T }> & { theme?: $Shape<T> }> {
+  ): WithThemeType<T> {
     class ThemedComponent extends React.Component<*> {
       /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
