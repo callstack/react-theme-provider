@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createTheming from '../createTheming';
@@ -115,7 +116,11 @@ describe('createTheming', () => {
       }
       render() {
         return (
-          <WithThemeComponent ref={component => (this.comp = component)} />
+          <WithThemeComponent
+            ref={component => {
+              this.comp = component;
+            }}
+          />
         );
       }
     }
