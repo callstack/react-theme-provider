@@ -138,11 +138,11 @@ const createWithTheme = <T>(
             ThemedComponent.prototype[prop] = function(...args) {
               // Make sure the function is called with correct context
               // $FlowFixMe
-              Comp.prototype[prop].apply(this.getWrappedInstance(), args);
+              return Comp.prototype[prop].apply(
+                this.getWrappedInstance(),
+                args
+              );
             };
-            // Set the function name for better debugging
-            // $FlowFixMe
-            ThemedComponent.prototype[prop].name = prop;
           } else {
             // Copy properties as getters and setters
             // This make sure dynamic properties always stay up-to-date
