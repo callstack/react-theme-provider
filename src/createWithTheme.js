@@ -83,9 +83,12 @@ const createWithTheme = <T>(
                 element = (
                   <Comp
                     {...this.props}
-                    ref={c => {
-                      this._root = c;
-                    }}
+                    ref={
+                      this.props.forwardedRef ||
+                      (c => {
+                        this._root = c;
+                      })
+                    }
                     theme={merged}
                   />
                 );
@@ -115,6 +118,15 @@ const createWithTheme = <T>(
           ? this._root.getWrappedInstance()
           : this._root;
       };
+
+      if (React.forwardRef) {
+        return hoistNonReactStatics(
+          React.forwardRef((props, ref) => (
+            <ThemedComponent {...props} forwardedRef={ref} />
+          )),
+          Comp
+        );
+      }
 
       // Copy non-private methods and properties from underlying component
       // This will take expose public methods and properties such as `focus`, `setNativeProps` etc.
