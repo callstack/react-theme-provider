@@ -107,71 +107,69 @@ const createWithTheme = <T>(
       }
     }
 
+    let ComponentWithMethods = ThemedComponent;
     if (isClassComponent(Comp)) {
       // getWrappedInstance is exposed by some HOCs like react-redux's connect
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
+      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
         return this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
       };
 
       if (React.forwardRef) {
-        return hoistNonReactStatics(
-          React.forwardRef((props, ref) => (
-            <ThemedComponent {...props} forwardedRef={ref} />
-          )),
-          Comp
-        );
-      }
-
-      // Copy non-private methods and properties from underlying component
-      // This will take expose public methods and properties such as `focus`, `setNativeProps` etc.
-      // $FlowFixMe
-      Object.getOwnPropertyNames(Comp.prototype)
-        .filter(
-          prop =>
-            !(
-              REACT_METHODS.includes(prop) || // React specific methods and properties
-              prop in React.Component.prototype || // Properties from React's prototype such as `setState`
-              prop in ThemedComponent.prototype || // Properties from enhanced component's prototype
-              // Private methods
-              prop.startsWith('_')
-            )
-        )
-        .forEach(prop => {
-          // $FlowFixMe
-          if (typeof Comp.prototype[prop] === 'function') {
-            /* eslint-disable func-names */
+        ComponentWithMethods = React.forwardRef((props, ref) => (
+          <ThemedComponent {...props} forwardedRef={ref} />
+        ));
+      } else {
+        // Copy non-private methods and properties from underlying component
+        // This will take expose public methods and properties such as `focus`, `setNativeProps` etc.
+        // $FlowFixMe
+        Object.getOwnPropertyNames(Comp.prototype)
+          .filter(
+            prop =>
+              !(
+                REACT_METHODS.includes(prop) || // React specific methods and properties
+                prop in React.Component.prototype || // Properties from React's prototype such as `setState`
+                prop in ComponentWithMethods.prototype || // Properties from enhanced component's prototype
+                // Private methods
+                prop.startsWith('_')
+              )
+          )
+          .forEach(prop => {
             // $FlowFixMe
-            ThemedComponent.prototype[prop] = function(...args) {
-              // Make sure the function is called with correct context
+            if (typeof Comp.prototype[prop] === 'function') {
+              /* eslint-disable func-names */
               // $FlowFixMe
-              return Comp.prototype[prop].apply(
-                this.getWrappedInstance(),
-                args
-              );
-            };
-          } else {
-            // Copy properties as getters and setters
-            // This make sure dynamic properties always stay up-to-date
-            Object.defineProperty(ThemedComponent.prototype, prop, {
-              get() {
-                return this.getWrappedInstance()[prop];
-              },
-              set(value) {
-                this.getWrappedInstance()[prop] = value;
-              },
-            });
-          }
-        });
+              ComponentWithMethods.prototype[prop] = function(...args) {
+                // Make sure the function is called with correct context
+                // $FlowFixMe
+                return Comp.prototype[prop].apply(
+                  this.getWrappedInstance(),
+                  args
+                );
+              };
+            } else {
+              // Copy properties as getters and setters
+              // This make sure dynamic properties always stay up-to-date
+              Object.defineProperty(ComponentWithMethods.prototype, prop, {
+                get() {
+                  return this.getWrappedInstance()[prop];
+                },
+                set(value) {
+                  this.getWrappedInstance()[prop] = value;
+                },
+              });
+            }
+          });
+      }
     }
 
-    hoistNonReactStatics(ThemedComponent, Comp);
+    hoistNonReactStatics(ComponentWithMethods, Comp);
 
-    return (ThemedComponent: any);
+    return (ComponentWithMethods: any);
   };
 
 export default createWithTheme;
