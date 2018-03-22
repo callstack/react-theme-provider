@@ -97,7 +97,7 @@ describe('createTheming', () => {
   });
 
   it('allows to use ref on wrapped component', () => {
-    class Component extends React.Component {
+    class MyComponent extends React.Component {
       foo() {
         return 'bar';
       }
@@ -106,7 +106,7 @@ describe('createTheming', () => {
         return null;
       }
     }
-    const WithThemeComponent = withTheme(Component);
+    const WithThemeComponent = withTheme(MyComponent);
 
     class Wrapper extends React.Component {
       componentDidMount() {
@@ -117,7 +117,7 @@ describe('createTheming', () => {
       render() {
         return (
           <WithThemeComponent
-            ref={component => {
+            innerRef={component => {
               this.comp = component;
             }}
           />
