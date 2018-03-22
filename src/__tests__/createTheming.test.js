@@ -132,4 +132,26 @@ describe('createTheming', () => {
       node
     );
   });
+
+  it('merge theme from provider and prop', () => {
+    const PropsChecker = withTheme(({ theme }) => {
+      expect(typeof theme).toBe('object');
+      expect(theme).toEqual({
+        ...lightTheme,
+        secondaryColor: '#252525',
+      });
+      return null;
+    });
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <PropsChecker
+          theme={{
+            secondaryColor: '#252525',
+          }}
+        />
+      </ThemeProvider>,
+      node
+    );
+  });
 });
