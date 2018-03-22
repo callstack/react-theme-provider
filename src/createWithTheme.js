@@ -3,35 +3,9 @@
 import * as React from 'react';
 import merge from 'lodash.merge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-
 import type { Context } from 'create-react-context';
 
-const REACT_METHODS = [
-  'autobind',
-  'childContextTypes',
-  'componentDidMount',
-  'componentDidUpdate',
-  'componentWillMount',
-  'componentWillReceiveProps',
-  'componentWillUnmount',
-  'componentWillUpdate',
-  'contextTypes',
-  'displayName',
-  'getChildContext',
-  'getDefaultProps',
-  'getDOMNode',
-  'getInitialState',
-  'mixins',
-  'propTypes',
-  'render',
-  'replaceProps',
-  'setProps',
-  'shouldComponentUpdate',
-  'statics',
-  'updateComponent',
-];
-
-const isClassComponent = (Component: Function) => !!Component.prototype.render;
+import { getComponentDisplayName, isClassComponent } from './utils';
 
 type withThemeReturnType<Theme, Props: {}> = React.ComponentType<
   React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
@@ -50,7 +24,7 @@ const createWithTheme = <T>(
   ): WithThemeType<T> {
     class ThemedComponent extends React.Component<*> {
       /* $FlowFixMe */
-      static displayName = `withTheme(${Comp.displayName || Comp.name})`;
+      static displayName = `withTheme(${getComponentDisplayName(Comp)})`;
 
       _previous: ?{ a: T, b: ?$Shape<T>, result: T };
       _merge = (a: T, b: ?$Shape<T>) => {
@@ -67,37 +41,49 @@ const createWithTheme = <T>(
         return result;
       };
 
-      _root: any;
-
       render() {
-        const { forwardedRef, ...rest } = this.props;
+        const { forwardedRef, innerRef, ...rest } = this.props;
+
         return (
           <ThemeContext.Consumer>
             {theme => {
-              const merged = this._merge(theme, this.props.theme);
+              const mergedTheme = this._merge(theme, this.props.theme);
 
               let element;
               if (React.forwardRef) {
-                element = <Comp {...rest} theme={merged} ref={forwardedRef} />;
-              } else if (isClassComponent(Comp)) {
-                // Only add refs for class components as function components don't support them
-                // It's needed to support use cases which need access to the underlying node
+                if (innerRef) {
+                  console.warn(
+                    "From React >=16.3 there's a new API support for refs, so you do not need to pass an `innerRef` prop any more. Use `ref` instead."
+                  );
+                }
                 element = (
                   <Comp
                     {...rest}
-                    ref={c => {
-                      this._root = c;
-                    }}
-                    theme={merged}
+                    theme={mergedTheme}
+                    ref={forwardedRef || innerRef}
                   />
                 );
+              } else if (isClassComponent(Comp)) {
+                // Only add refs for class components as function components don't support them
+                // It's needed to support use cases which need access to the underlying node
+
+                if (!innerRef) {
+                  console.error(
+                    `${getComponentDisplayName(
+                      Comp
+                    )} is using \`ref\`, use \`innerRef\` instead or upgrade React to >=16.3.x.`
+                  );
+                }
+                element = <Comp {...rest} ref={innerRef} theme={mergedTheme} />;
               } else {
-                element = <Comp {...rest} theme={merged} />;
+                element = <Comp {...rest} theme={mergedTheme} />;
               }
 
-              if (merged !== this.props.theme) {
+              if (mergedTheme !== this.props.theme) {
                 // If a theme prop was passed, expose it to the children
-                return <ThemeProvider theme={merged}>{element}</ThemeProvider>;
+                return (
+                  <ThemeProvider theme={mergedTheme}>{element}</ThemeProvider>
+                );
               }
 
               return element;
@@ -107,69 +93,7 @@ const createWithTheme = <T>(
       }
     }
 
-    let ComponentWithMethods = ThemedComponent;
-    if (isClassComponent(Comp)) {
-      // getWrappedInstance is exposed by some HOCs like react-redux's connect
-      // Use it to get the ref to the underlying element
-      // Also expose it to access the underlying element after wrapping
-      // $FlowFixMe
-      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
-        return this._root.getWrappedInstance
-          ? this._root.getWrappedInstance()
-          : this._root;
-      };
-
-      if (React.forwardRef) {
-        ComponentWithMethods = React.forwardRef((props, ref) => (
-          <ThemedComponent {...props} forwardedRef={ref} />
-        ));
-      } else {
-        // Copy non-private methods and properties from underlying component
-        // This will take expose public methods and properties such as `focus`, `setNativeProps` etc.
-        // $FlowFixMe
-        Object.getOwnPropertyNames(Comp.prototype)
-          .filter(
-            prop =>
-              !(
-                REACT_METHODS.includes(prop) || // React specific methods and properties
-                prop in React.Component.prototype || // Properties from React's prototype such as `setState`
-                prop in ComponentWithMethods.prototype || // Properties from enhanced component's prototype
-                // Private methods
-                prop.startsWith('_')
-              )
-          )
-          .forEach(prop => {
-            // $FlowFixMe
-            if (typeof Comp.prototype[prop] === 'function') {
-              /* eslint-disable func-names */
-              // $FlowFixMe
-              ComponentWithMethods.prototype[prop] = function(...args) {
-                // Make sure the function is called with correct context
-                // $FlowFixMe
-                return Comp.prototype[prop].apply(
-                  this.getWrappedInstance(),
-                  args
-                );
-              };
-            } else {
-              // Copy properties as getters and setters
-              // This make sure dynamic properties always stay up-to-date
-              Object.defineProperty(ComponentWithMethods.prototype, prop, {
-                get() {
-                  return this.getWrappedInstance()[prop];
-                },
-                set(value) {
-                  this.getWrappedInstance()[prop] = value;
-                },
-              });
-            }
-          });
-      }
-    }
-
-    hoistNonReactStatics(ComponentWithMethods, Comp);
-
-    return (ComponentWithMethods: any);
+    return hoistNonReactStatics(ThemedComponent, Comp);
   };
 
 export default createWithTheme;
