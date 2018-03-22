@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createTheming from '../createTheming';
@@ -91,6 +92,43 @@ describe('createTheming', () => {
 
         <DarkPropsChecker />
       </DarkThemeProvider>,
+      node
+    );
+  });
+
+  it('allows to use ref on wrapped component', () => {
+    class Component extends React.Component {
+      foo() {
+        return 'bar';
+      }
+
+      render() {
+        return null;
+      }
+    }
+    const WithThemeComponent = withTheme(Component);
+
+    class Wrapper extends React.Component {
+      componentDidMount() {
+        expect(typeof this.comp).toBe('object');
+        expect(typeof this.comp.foo).toEqual('function');
+        expect(this.comp.foo()).toEqual('bar');
+      }
+      render() {
+        return (
+          <WithThemeComponent
+            ref={component => {
+              this.comp = component;
+            }}
+          />
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <ThemeProvider>
+        <Wrapper />
+      </ThemeProvider>,
       node
     );
   });

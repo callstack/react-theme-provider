@@ -1,11 +1,10 @@
 /* @flow */
+import createReactContext, { type Context } from 'create-react-context';
 
 import createThemeProvider from './createThemeProvider';
 import createWithTheme from './createWithTheme';
 import type { WithThemeType } from './createWithTheme';
 import type { ThemeProviderType } from './createThemeProvider';
-
-let id = 0;
 
 export type ThemingType<T> = {
   ThemeProvider: ThemeProviderType<T>,
@@ -13,15 +12,15 @@ export type ThemingType<T> = {
 };
 
 export default function createTheming<T>(defaultTheme: T): ThemingType<T> {
-  const channelName = `react-theme-provider-${id++}$theme`;
+  const ThemeContext: Context<T> = createReactContext(defaultTheme);
 
   const ThemeProvider: ThemeProviderType<T> = createThemeProvider(
     defaultTheme,
-    channelName
+    ThemeContext
   );
   const withTheme: WithThemeType<T> = createWithTheme(
     ThemeProvider,
-    channelName
+    ThemeContext
   );
 
   return {

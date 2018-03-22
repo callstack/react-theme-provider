@@ -1,149 +1,175 @@
 /* @flow */
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import merge from 'lodash.merge';
-import isEqual from 'lodash.isequal';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-type withThemeRetunType<Theme, Props: {}> = React.ComponentType<
+import type { Context } from 'create-react-context';
+
+const REACT_METHODS = [
+  'autobind',
+  'childContextTypes',
+  'componentDidMount',
+  'componentDidUpdate',
+  'componentWillMount',
+  'componentWillReceiveProps',
+  'componentWillUnmount',
+  'componentWillUpdate',
+  'contextTypes',
+  'displayName',
+  'getChildContext',
+  'getDefaultProps',
+  'getDOMNode',
+  'getInitialState',
+  'mixins',
+  'propTypes',
+  'render',
+  'replaceProps',
+  'setProps',
+  'shouldComponentUpdate',
+  'statics',
+  'updateComponent',
+];
+
+const isClassComponent = (Component: Function) => !!Component.prototype.render;
+
+type withThemeReturnType<Theme, Props: {}> = React.ComponentType<
   React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
 >;
 
-const isClassComponent = (Component: Function) =>
-  Boolean(
-    Component &&
-      Component.prototype &&
-      typeof Component.prototype.render === 'function'
-  );
-
 export type WithThemeType<T> = <Props: {}>(
   Comp: React.ComponentType<Props>
-) => withThemeRetunType<T, Props>;
+) => withThemeReturnType<T, Props>;
 
 const createWithTheme = <T>(
   ThemeProvider: React.ComponentType<*>,
-  channel: string
+  ThemeContext: Context<T>
 ): WithThemeType<T> =>
   function withTheme<Props: {}>(
     Comp: React.ComponentType<Props>
-  ): withThemeRetunType<T, Props> {
-    class ThemedComponent extends React.PureComponent<*, { theme: T }> {
+  ): WithThemeType<T> {
+    class ThemedComponent extends React.Component<*> {
+      /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
-      static contextTypes = {
-        [channel]: PropTypes.object,
+      _previous: ?{ a: T, b: ?$Shape<T>, result: T };
+      _merge = (a: T, b: ?$Shape<T>) => {
+        const previous = this._previous;
+
+        if (previous && previous.a === a && previous.b === b) {
+          return previous.result;
+        }
+
+        const result = a && b ? merge(a, b) : a || b;
+
+        this._previous = { a, b, result };
+
+        return result;
       };
 
-      constructor(props, context) {
-        super(props, context);
-
-        const theme = this.context[channel] && this.context[channel].get();
-
-        if (typeof theme !== 'object' && typeof this.props.theme !== 'object') {
-          throw new Error(
-            `Couldn't find theme in the context or props. ` +
-              `You need to wrap your component in '<ThemeProvider />' or pass a 'theme' prop`
-          );
-        }
-
-        this.state = {
-          theme: this._merge(theme, props),
-        };
-      }
-
-      state: { theme: T };
-
-      componentDidMount() {
-        // Pure components could prevent propagation of context updates
-        // We setup a subscription so we always get notified about theme updates
-        this._subscription =
-          this.context[channel] &&
-          this.context[channel].subscribe(theme =>
-            this.setState({ theme: this._merge(theme, this.props) })
-          );
-      }
-
-      componentWillReceiveProps(nextProps: *) {
-        if (!isEqual(this.props.theme, nextProps.theme)) {
-          this.setState({
-            theme: this._merge(
-              this.context[channel] && this.context[channel].get(),
-              nextProps
-            ),
-          });
-        }
-      }
-
-      componentWillUnmount() {
-        this._subscription && this._subscription.remove();
-      }
-
-      _merge = (theme: T, props: *) =>
-        // Only merge if both theme from context and props are present
-        // Avoiding unnecessary merge allows us to check equality by reference
-        theme && props.theme
-          ? merge({}, theme, props.theme)
-          : theme || props.theme;
-
-      _subscription: { remove: Function };
       _root: any;
 
       render() {
-        let element;
+        const { forwardedRef, ...rest } = this.props;
+        return (
+          <ThemeContext.Consumer>
+            {theme => {
+              const merged = this._merge(theme, this.props.theme);
 
-        if (isClassComponent(Comp)) {
-          // Only add refs for class components as function components don't support them
-          // It's needed to support use cases which need access to the underlying node
-          element = (
-            <Comp
-              {...this.props}
-              ref={c => {
-                this._root = c;
-              }}
-              theme={this.state.theme}
-            />
-          );
-        } else {
-          element = <Comp {...this.props} theme={this.state.theme} />;
-        }
+              let element;
+              if (React.forwardRef) {
+                element = <Comp {...rest} theme={merged} ref={forwardedRef} />;
+              } else if (isClassComponent(Comp)) {
+                // Only add refs for class components as function components don't support them
+                // It's needed to support use cases which need access to the underlying node
+                element = (
+                  <Comp
+                    {...rest}
+                    ref={c => {
+                      this._root = c;
+                    }}
+                    theme={merged}
+                  />
+                );
+              } else {
+                element = <Comp {...rest} theme={merged} />;
+              }
 
-        if (this.state.theme !== this.props.theme) {
-          // If a theme prop was passed, expose it to the children
-          return (
-            <ThemeProvider theme={this.state.theme}>{element}</ThemeProvider>
-          );
-        }
+              if (merged !== this.props.theme) {
+                // If a theme prop was passed, expose it to the children
+                return <ThemeProvider theme={merged}>{element}</ThemeProvider>;
+              }
 
-        return element;
+              return element;
+            }}
+          </ThemeContext.Consumer>
+        );
       }
     }
 
+    let ComponentWithMethods = ThemedComponent;
     if (isClassComponent(Comp)) {
       // getWrappedInstance is exposed by some HOCs like react-redux's connect
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
+      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
         return this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
       };
 
-      // setNativeProps is used by Animated to set props on the native component
-      /* $FlowFixMe */
-      if (Comp.prototype.setNativeProps) {
+      if (React.forwardRef) {
+        ComponentWithMethods = React.forwardRef((props, ref) => (
+          <ThemedComponent {...props} forwardedRef={ref} />
+        ));
+      } else {
+        // Copy non-private methods and properties from underlying component
+        // This will take expose public methods and properties such as `focus`, `setNativeProps` etc.
         // $FlowFixMe
-        ThemedComponent.prototype.setNativeProps = function setNativeProps(
-          ...args
-        ) {
-          const root = this.getWrappedInstance();
-          return root.setNativeProps(...args);
-        };
+        Object.getOwnPropertyNames(Comp.prototype)
+          .filter(
+            prop =>
+              !(
+                REACT_METHODS.includes(prop) || // React specific methods and properties
+                prop in React.Component.prototype || // Properties from React's prototype such as `setState`
+                prop in ComponentWithMethods.prototype || // Properties from enhanced component's prototype
+                // Private methods
+                prop.startsWith('_')
+              )
+          )
+          .forEach(prop => {
+            // $FlowFixMe
+            if (typeof Comp.prototype[prop] === 'function') {
+              /* eslint-disable func-names */
+              // $FlowFixMe
+              ComponentWithMethods.prototype[prop] = function(...args) {
+                // Make sure the function is called with correct context
+                // $FlowFixMe
+                return Comp.prototype[prop].apply(
+                  this.getWrappedInstance(),
+                  args
+                );
+              };
+            } else {
+              // Copy properties as getters and setters
+              // This make sure dynamic properties always stay up-to-date
+              Object.defineProperty(ComponentWithMethods.prototype, prop, {
+                get() {
+                  return this.getWrappedInstance()[prop];
+                },
+                set(value) {
+                  this.getWrappedInstance()[prop] = value;
+                },
+              });
+            }
+          });
       }
     }
 
-    return hoistNonReactStatics(ThemedComponent, Comp);
+    hoistNonReactStatics(ComponentWithMethods, Comp);
+
+    return (ComponentWithMethods: any);
   };
 
 export default createWithTheme;
