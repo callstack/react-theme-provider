@@ -70,30 +70,29 @@ const createWithTheme = <T>(
       _root: any;
 
       render() {
+        const { forwardedRef, ...rest } = this.props;
         return (
           <ThemeContext.Consumer>
             {theme => {
               const merged = this._merge(theme, this.props.theme);
 
               let element;
-
-              if (isClassComponent(Comp)) {
+              if (React.forwardRef) {
+                element = <Comp {...rest} theme={merged} ref={forwardedRef} />;
+              } else if (isClassComponent(Comp)) {
                 // Only add refs for class components as function components don't support them
                 // It's needed to support use cases which need access to the underlying node
                 element = (
                   <Comp
-                    {...this.props}
-                    ref={
-                      this.props.forwardedRef ||
-                      (c => {
-                        this._root = c;
-                      })
-                    }
+                    {...rest}
+                    ref={c => {
+                      this._root = c;
+                    }}
                     theme={merged}
                   />
                 );
               } else {
-                element = <Comp {...this.props} theme={merged} />;
+                element = <Comp {...rest} theme={merged} />;
               }
 
               if (merged !== this.props.theme) {
