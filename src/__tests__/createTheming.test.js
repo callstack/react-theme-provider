@@ -154,4 +154,30 @@ describe('createTheming', () => {
       node
     );
   });
+
+  it('rerender component if theme props changed', () => {
+    const render = jest.fn();
+    class Checker extends React.Component {
+      render() {
+        render();
+        return null;
+      }
+    }
+
+    const CheckerWithTheme = withTheme(Checker);
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <CheckerWithTheme />
+      </ThemeProvider>,
+      node
+    );
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CheckerWithTheme />
+      </ThemeProvider>,
+      node
+    );
+    expect(render.mock.calls.length).toEqual(2);
+  });
 });
