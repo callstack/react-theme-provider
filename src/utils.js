@@ -28,30 +28,35 @@ const REACT_METHODS = [
 ];
 
 export function copyRefs<Props>(
-  ThemedComponent: React.ComponentType<Props>,
-  OriginalComponent: React.ComponentType<Props>
+  TargetComponent: React.ComponentType<Props>,
+  SourceComponent: React.ComponentType<Props>
 ): React.ComponentType<Props> {
-  const ComponentWithMethods = ThemedComponent;
-  Object.getOwnPropertyNames(OriginalComponent.prototype)
+  if (!SourceComponent.prototype) {
+    return TargetComponent;
+  }
+
+  // $FlowFixMe
+  Object.getOwnPropertyNames(SourceComponent.prototype)
     .filter(
       prop =>
         !(
           REACT_METHODS.includes(prop) || // React specific methods and properties
           prop in React.Component.prototype || // Properties from React's prototype such as `setState`
-          prop in ComponentWithMethods.prototype || // Properties from enhanced component's prototype
+          // $FlowFixMe
+          prop in TargetComponent.prototype || // Properties from enhanced component's prototype
           // Private methods
           prop.startsWith('_')
         )
     )
     .forEach(prop => {
       // $FlowFixMe
-      if (typeof OriginalComponent.prototype[prop] === 'function') {
-        /* eslint-disable func-names */
+      if (typeof SourceComponent.prototype[prop] === 'function') {
+        /* eslint-disable func-names, no-param-reassign */
         // $FlowFixMe
-        ComponentWithMethods.prototype[prop] = function(...args) {
+        TargetComponent.prototype[prop] = function(...args) {
           // Make sure the function is called with correct context
           // $FlowFixMe
-          return OriginalComponent.prototype[prop].apply(
+          return SourceComponent.prototype[prop].apply(
             this.getWrappedInstance(),
             args
           );
@@ -59,7 +64,8 @@ export function copyRefs<Props>(
       } else {
         // Copy properties as getters and setters
         // This make sure dynamic properties always stay up-to-date
-        Object.defineProperty(ComponentWithMethods.prototype, prop, {
+        // $FlowFixMe
+        Object.defineProperty(TargetComponent.prototype, prop, {
           get() {
             return this.getWrappedInstance()[prop];
           },
@@ -70,5 +76,5 @@ export function copyRefs<Props>(
       }
     });
 
-  return ComponentWithMethods;
+  return TargetComponent;
 }
