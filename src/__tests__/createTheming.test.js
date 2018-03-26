@@ -135,7 +135,6 @@ describe('createTheming', () => {
 
   it('merge theme from provider and prop', () => {
     const PropsChecker = withTheme(({ theme }) => {
-      expect(typeof theme).toBe('object');
       expect(theme).toEqual({
         ...lightTheme,
         secondaryColor: '#252525',
@@ -156,11 +155,10 @@ describe('createTheming', () => {
   });
 
   it('rerender component if theme props changed', () => {
-    const render = jest.fn();
+    const render = jest.fn(() => null);
     class Checker extends React.Component {
       render() {
-        render();
-        return null;
+        return render();
       }
     }
 
