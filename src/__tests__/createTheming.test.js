@@ -132,4 +132,52 @@ describe('createTheming', () => {
       node
     );
   });
+
+  it('merge theme from provider and prop', () => {
+    const PropsChecker = withTheme(({ theme }) => {
+      expect(typeof theme).toBe('object');
+      expect(theme).toEqual({
+        ...lightTheme,
+        secondaryColor: '#252525',
+      });
+      return null;
+    });
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <PropsChecker
+          theme={{
+            secondaryColor: '#252525',
+          }}
+        />
+      </ThemeProvider>,
+      node
+    );
+  });
+
+  it('rerender component if theme props changed', () => {
+    const render = jest.fn();
+    class Checker extends React.Component {
+      render() {
+        render();
+        return null;
+      }
+    }
+
+    const CheckerWithTheme = withTheme(Checker);
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <CheckerWithTheme />
+      </ThemeProvider>,
+      node
+    );
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CheckerWithTheme />
+      </ThemeProvider>,
+      node
+    );
+    expect(render.mock.calls.length).toEqual(2);
+  });
 });
