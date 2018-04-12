@@ -22,8 +22,8 @@ const shared = {
 
 export default [
   Object.assign({}, shared, {
-    moduleName: 'ThemeProvider',
     output: {
+      name: 'ThemeProvider',
       format: 'umd',
       file:
         env === 'production'
