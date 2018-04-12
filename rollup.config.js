@@ -9,13 +9,15 @@ import uglify from 'rollup-plugin-uglify';
 const env = process.env.NODE_ENV;
 
 const shared = {
-  entry: `src/index.js`,
-  sourceMap: true,
-  external: ['react'],
-  globals: {
-    react: 'React',
+  input: `src/index.js`,
+  output: {
+    globals: {
+      react: 'React',
+    },
+    sourcemap: true,
+    exports: 'named',
   },
-  exports: 'named',
+  external: ['react'],
 };
 
 export default [

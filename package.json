@@ -48,7 +48,7 @@
     "prettier": "^1.7.4",
     "react": "^16.0.0",
     "react-dom": "^16.2.0",
-    "rollup": "^0.55.2",
+    "rollup": "^0.57.1 ",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-node-resolve": "^3.0.2",
