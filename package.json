@@ -9,7 +9,7 @@
     "lint": "eslint src",
     "prettier": "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
     "build:standalone": "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
-    "build:babel": "babel src/ --out-dir lib/ --ignore **/__tests__",
+    "build:babel": "flow-copy-source src lib && babel src/ --out-dir lib/ --ignore **/__tests__",
     "build:standalonedev": "cross-env NODE_ENV=development BABEL_TARGET=rollup rollup -c",
     "build": "rm -rf dist && rm -rf lib && npm run build:standalone && npm run build:babel",
     "prepublish": "npm run build",
@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "create-react-context": "^0.2.1",
+    "flow-copy-source": "^1.3.0",
     "hoist-non-react-statics": "^2.5.0",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",
