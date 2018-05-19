@@ -8,29 +8,29 @@ import type { Context } from 'create-react-context';
 
 import { copyRefs } from './utils';
 
-const isClassComponent = (Component: Function) => !!Component.prototype.render;
+import type { ThemeProviderType } from './createThemeProvider';
 
-type withThemeReturnType<Theme, Props: {}> = React.ComponentType<
-  React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
->;
+const isClassComponent = (Component: any) =>
+  Boolean(Component.prototype && Component.prototype.isReactComponent);
 
-export type WithThemeType<T> = <Props: {}>(
-  Comp: React.ComponentType<Props>
-) => withThemeReturnType<T, Props>;
+export type WithThemeType<T, S> = <C: React.ComponentType<*>>(
+  Comp: C
+) => C &
+  React.ComponentType<
+    $Diff<React.ElementConfig<C>, { theme: T }> & { theme?: S }
+  >;
 
-const createWithTheme = <T>(
-  ThemeProvider: React.ComponentType<*>,
+const createWithTheme = <T, S>(
+  ThemeProvider: ThemeProviderType<T>,
   ThemeContext: Context<T>
-): WithThemeType<T> =>
-  function withTheme<Props: {}>(
-    Comp: React.ComponentType<Props>
-  ): WithThemeType<T> {
+) =>
+  function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {
       /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
-      _previous: ?{ a: T, b: ?$Shape<T>, result: T };
-      _merge = (a: T, b: ?$Shape<T>) => {
+      _previous: ?{ a: T, b: ?S, result: T };
+      _merge = (a: T, b: ?S) => {
         const previous = this._previous;
 
         if (previous && previous.a === a && previous.b === b) {
@@ -47,21 +47,19 @@ const createWithTheme = <T>(
       _root: any;
 
       render() {
-        const { forwardedRef, ...rest } = this.props;
         return (
           <ThemeContext.Consumer>
             {theme => {
               const merged = this._merge(theme, this.props.theme);
 
               let element;
-              if (React.forwardRef) {
-                element = <Comp {...rest} theme={merged} ref={forwardedRef} />;
-              } else if (isClassComponent(Comp)) {
+
+              if (isClassComponent(Comp)) {
                 // Only add refs for class components as function components don't support them
                 // It's needed to support use cases which need access to the underlying node
                 element = (
                   <Comp
-                    {...rest}
+                    {...this.props}
                     ref={c => {
                       this._root = c;
                     }}
@@ -69,7 +67,7 @@ const createWithTheme = <T>(
                   />
                 );
               } else {
-                element = <Comp {...rest} theme={merged} />;
+                element = <Comp {...this.props} theme={merged} />;
               }
 
               if (merged !== this.props.theme) {
@@ -90,19 +88,13 @@ const createWithTheme = <T>(
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
+      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
         return this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
       };
 
-      if (React.forwardRef) {
-        ComponentWithMethods = React.forwardRef((props, ref) => (
-          <ComponentWithMethods {...props} forwardedRef={ref} />
-        ));
-      } else {
-        ComponentWithMethods = copyRefs(ComponentWithMethods, Comp);
-      }
+      ComponentWithMethods = copyRefs(ThemedComponent, Comp);
     }
 
     hoistNonReactStatics(ComponentWithMethods, Comp);
