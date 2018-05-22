@@ -28,7 +28,7 @@ export const themes: { [key: string]: Theme } = {
   },
 };
 
-const { ThemeProvider, withTheme }: ThemingType<Theme> = createTheming(
+const { ThemeProvider, withTheme }: ThemingType<Theme, $Shape<Theme>> = createTheming(
   themes.default
 );
 
