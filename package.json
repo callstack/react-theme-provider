@@ -4,6 +4,7 @@
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",
   "module": "./dist/themeProvider.es.js",
+  "files": ["*.md", "dist", "lib", "src", ".flowconfig"],
   "scripts": {
     "flow": "flow",
     "lint": "eslint src",
