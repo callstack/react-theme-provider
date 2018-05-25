@@ -8,29 +8,29 @@ import type { Context } from 'create-react-context';
 
 import { copyRefs } from './utils';
 
-const isClassComponent = (Component: Function) => !!Component.prototype.render;
+import type { ThemeProviderType } from './createThemeProvider';
 
-type withThemeReturnType<Theme, Props: {}> = React.ComponentType<
-  React.ElementConfig<React.ComponentType<$Diff<Props, { theme: Theme }>>>
->;
+const isClassComponent = (Component: any) =>
+  Boolean(Component.prototype && Component.prototype.isReactComponent);
 
-export type WithThemeType<T> = <Props: {}>(
-  Comp: React.ComponentType<Props>
-) => withThemeReturnType<T, Props>;
+export type WithThemeType<T, S> = <C: React.ComponentType<*>>(
+  Comp: C
+) => C &
+  React.ComponentType<
+    $Diff<React.ElementConfig<C>, { theme: T }> & { theme?: S }
+  >;
 
-const createWithTheme = <T>(
-  ThemeProvider: React.ComponentType<*>,
+const createWithTheme = <T, S>(
+  ThemeProvider: ThemeProviderType<T>,
   ThemeContext: Context<T>
-): WithThemeType<T> =>
-  function withTheme<Props: {}>(
-    Comp: React.ComponentType<Props>
-  ): WithThemeType<T> {
+) =>
+  function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {
       /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
-      _previous: ?{ a: T, b: ?$Shape<T>, result: T };
-      _merge = (a: T, b: ?$Shape<T>) => {
+      _previous: ?{ a: T, b: ?S, result: T };
+      _merge = (a: T, b: ?S) => {
         const previous = this._previous;
 
         if (previous && previous.a === a && previous.b === b) {
@@ -90,7 +90,7 @@ const createWithTheme = <T>(
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
+      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
         return this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
