@@ -1,10 +1,10 @@
 {
   "name": "@callstack/react-theme-provider",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",
   "module": "./dist/themeProvider.es.js",
-  "files": ["*.md", "dist", "lib", "src", ".flowconfig"],
+  "files": ["*.md", "dist", "lib"],
   "scripts": {
     "flow": "flow",
     "lint": "eslint src",
