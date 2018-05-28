@@ -18,6 +18,10 @@ You can use it to customize colors, fonts, etc.
  - `withTheme` - Higher Order Component
  - `createTheming(defaultTheme)` - factory returns `ThemeProvider` component and `withTheme` HOC with default theme injected.
 
+## Examples
+ - buildin example for web react - ['/examples/web'](/examples/web)
+ - [![Edit v6o562k6l7](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/v6o562k6l7)
+
 ## Getting started
 ### Instalation
 ```
