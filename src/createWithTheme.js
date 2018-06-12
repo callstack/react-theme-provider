@@ -96,13 +96,7 @@ const createWithTheme = <T, S>(
           : this._root;
       };
 
-      if (React.forwardRef) {
-        ComponentWithMethods = React.forwardRef((props, ref) => (
-          <ComponentWithMethods {...props} forwardedRef={ref} />
-        ));
-      } else {
-        ComponentWithMethods = copyRefs(ComponentWithMethods, Comp);
-      }
+      ComponentWithMethods = copyRefs(ComponentWithMethods, Comp);
     }
 
     hoistNonReactStatics(ComponentWithMethods, Comp);
