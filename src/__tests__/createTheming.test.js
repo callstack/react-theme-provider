@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import createTheming from '../createTheming';
 
@@ -121,6 +121,70 @@ describe('createTheming', () => {
               this.comp = component;
             }}
           />
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <ThemeProvider>
+        <Wrapper />
+      </ThemeProvider>,
+      node
+    );
+  });
+
+  it('Should set properly getWrappedInstance method', () => {
+    class Component extends React.Component {
+      foo() {
+        return 'bar';
+      }
+
+      getWrappedInstance() {
+        return this;
+      }
+
+      render() {
+        return null;
+      }
+    }
+    class ComponentWithoutGWI extends React.Component {
+      foo() {
+        return 'bar';
+      }
+
+      render() {
+        return null;
+      }
+    }
+    const WithThemeComponent = withTheme(Component);
+    const WithThemeComponentWithoutGWI = withTheme(ComponentWithoutGWI);
+
+    class Wrapper extends React.Component {
+      componentDidMount() {
+        expect(typeof this.comp).toBe('object');
+        expect(typeof this.comp.getWrappedInstance).toEqual('function');
+        expect(this.comp.getWrappedInstance().foo()).toEqual('bar');
+
+        expect(typeof this.compWithoutGWI).toBe('object');
+        expect(typeof this.compWithoutGWI.getWrappedInstance).toEqual(
+          'function'
+        );
+        expect(this.compWithoutGWI.getWrappedInstance().foo()).toEqual('bar');
+      }
+      render() {
+        return (
+          <Fragment>
+            <WithThemeComponent
+              ref={component => {
+                this.comp = component;
+              }}
+            />
+            <WithThemeComponentWithoutGWI
+              ref={component => {
+                this.compWithoutGWI = component;
+              }}
+            />
+          </Fragment>
         );
       }
     }

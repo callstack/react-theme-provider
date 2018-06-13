@@ -54,9 +54,7 @@ const createWithTheme = <T, S>(
               const merged = this._merge(theme, this.props.theme);
 
               let element;
-              if (React.forwardRef) {
-                element = <Comp {...rest} theme={merged} ref={forwardedRef} />;
-              } else if (isClassComponent(Comp)) {
+              if (isClassComponent(Comp)) {
                 // Only add refs for class components as function components don't support them
                 // It's needed to support use cases which need access to the underlying node
                 element = (
@@ -90,7 +88,7 @@ const createWithTheme = <T, S>(
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
+      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
         return this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
