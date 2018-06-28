@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import merge from 'lodash.merge';
+import merge from 'deepmerge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import type { Context } from 'create-react-context';
