@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import merge from 'lodash.merge';
+import deepmerge from 'deepmerge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import type { Context } from 'create-react-context';
@@ -37,7 +37,7 @@ const createWithTheme = <T, S>(
           return previous.result;
         }
 
-        const result = a && b ? merge(a, b) : a || b;
+        const result = a && b ? deepmerge(a, b) : a || b;
 
         this._previous = { a, b, result };
 

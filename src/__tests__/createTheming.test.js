@@ -242,4 +242,34 @@ describe('createTheming', () => {
     );
     expect(render.mock.calls.length).toEqual(2);
   });
+
+  it('It doesnt mutate existing theme', () => {
+    const Checker1 = withTheme(({ theme }) => {
+      expect(theme).toEqual({
+        ...lightTheme,
+        primaryColor: 'red',
+      });
+      return null;
+    });
+
+    const Checker1WithTheme = withTheme(Checker1);
+
+    const Checker2 = withTheme(({ theme }) => {
+      expect(theme).toEqual({
+        ...lightTheme,
+        primaryColor: '#ffcaaa',
+      });
+      return null;
+    });
+
+    const Checker2WithTheme = withTheme(Checker2);
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <Checker1WithTheme theme={{ primaryColor: 'red' }} />
+        <Checker2WithTheme />
+      </ThemeProvider>,
+      node
+    );
+  });
 });
