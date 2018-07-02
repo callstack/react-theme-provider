@@ -201,6 +201,7 @@ describe('createTheming', () => {
 
   it('merge theme from provider and prop', () => {
     const PropsChecker = withTheme(({ theme }) => {
+      expect(theme).not.toBe(lightTheme);
       expect(theme).toEqual({
         ...lightTheme,
         secondaryColor: '#252525',
