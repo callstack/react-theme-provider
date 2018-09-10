@@ -4,10 +4,12 @@
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",
   "module": "./dist/themeProvider.es.js",
+  "typings": "./typings/index.d.ts",
   "files": [
     "*.md",
     "dist",
-    "lib"
+    "lib",
+    "typings"
   ],
   "scripts": {
     "flow": "flow",
