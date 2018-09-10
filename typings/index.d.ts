@@ -19,5 +19,7 @@ declare module "@callstack/react-theme-provider" {
     Comp: React.ComponentType<Props>
   ) => React.ComponentType<Without<Props, "theme">>;
 
-  export const createTheming: <T>(defaultTheme: T) => ThemingType<T>;
+  export const createTheming: <Theme>(
+    defaultTheme: Theme
+  ) => ThemingType<Theme>;
 }
