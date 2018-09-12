@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "flow": "flow",
+    "typescript": "tsc -p ./tsconfig.test.json",
     "lint": "eslint src",
     "prettier": "prettier --single-quote --trailing-comma es5 --write './src/**/*.js",
     "build:standalone": "cross-env NODE_ENV=production BABEL_TARGET=rollup rollup -c",
@@ -40,6 +41,7 @@
   },
   "homepage": "https://github.com/callstack/react-theme-provider#readme",
   "devDependencies": {
+    "@types/react": "^16.4.14",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
@@ -61,7 +63,8 @@
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^3.0.0",
+    "typescript": "^3.0.3"
   },
   "peerDependencies": {
     "react": "^15.3.0 || ^16.0.0"
