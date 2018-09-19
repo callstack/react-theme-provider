@@ -31,6 +31,7 @@ export function copyRefs<Props>(
   TargetComponent: React.ComponentType<Props>,
   SourceComponent: React.ComponentType<Props>
 ): React.ComponentType<Props> {
+  /* $FlowFixMe */
   if (!SourceComponent.prototype) {
     return TargetComponent;
   }
