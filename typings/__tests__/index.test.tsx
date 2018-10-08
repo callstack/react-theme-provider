@@ -55,5 +55,6 @@ const ThemedTitle = withTheme(TitleComponent);
 const App = () => (
   <ThemeProvider theme={themes.default}>
     <ThemedTitle title="React Theme Provider" theme={{ primaryColor: 'pink' }} />
+    <ThemedTitle title="Second title" />
   </ThemeProvider>
 );
