@@ -11,7 +11,7 @@ export type ThemingType<Theme, PartialTheme> = {
   ThemeProvider: ThemeProviderType<Theme>;
   withTheme: <Props extends { theme: Theme }>(
     Comp: React.ComponentType<Props>
-  ) => React.ComponentType<Without<Props, "theme"> & { theme: PartialTheme }>;
+  ) => React.ComponentType<Without<Props, "theme"> & { theme?: PartialTheme }>;
 };
 
 // Library exports
