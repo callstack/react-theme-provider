@@ -13,7 +13,7 @@ import type { ThemeProviderType } from './createThemeProvider';
 const isClassComponent = (Component: any) =>
   Boolean(Component.prototype && Component.prototype.isReactComponent);
 
-export type WithThemeType<T, S> = <C: React.ComponentType<*>>(
+export type WithThemeType<T, S> = <P, C: React.ComponentType<P>>(
   Comp: C
 ) => C &
   React.ComponentType<
