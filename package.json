@@ -1,6 +1,6 @@
 {
   "name": "@callstack/react-theme-provider",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",
   "module": "./dist/themeProvider.es.js",
