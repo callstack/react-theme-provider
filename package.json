@@ -72,7 +72,7 @@
   "dependencies": {
     "create-react-context": "^0.2.1",
     "deepmerge": "^2.1.1",
-    "flow-copy-source": "^1.3.0",
+    "flow-copy-source": "^2.0.2",
     "hoist-non-react-statics": "^2.5.0",
     "prop-types": "^15.6.0"
   },
