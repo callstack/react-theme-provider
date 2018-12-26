@@ -10,17 +10,21 @@ import { copyRefs } from './utils';
 
 import type { ThemeProviderType } from './createThemeProvider';
 
+type $DeepShape<O: Object> = $Shape<
+  $ObjMap<O, (<V: Object>(V) => $DeepShape<V>) & (<V>(V) => V)>
+>;
+
 const isClassComponent = (Component: any) =>
   Boolean(Component.prototype && Component.prototype.isReactComponent);
 
-export type WithThemeType<T, S> = <P, C: React.ComponentType<P>>(
+export type WithThemeType<T> = <P, C: React.ComponentType<P>>(
   Comp: C
 ) => C &
   React.ComponentType<
-    $Diff<React.ElementConfig<C>, { theme: T }> & { theme?: S }
+    $Diff<React.ElementConfig<C>, { theme: T }> & { theme?: $DeepShape<T> }
   >;
 
-const createWithTheme = <T, S>(
+const createWithTheme = <T: Object, S: $DeepShape<T>>(
   ThemeProvider: ThemeProviderType<T>,
   ThemeContext: Context<T>
 ) =>
@@ -47,7 +51,6 @@ const createWithTheme = <T, S>(
       _root: any;
 
       render() {
-        const { forwardedRef, ...rest } = this.props;
         return (
           <ThemeContext.Consumer>
             {theme => {
@@ -59,7 +62,7 @@ const createWithTheme = <T, S>(
                 // It's needed to support use cases which need access to the underlying node
                 element = (
                   <Comp
-                    {...rest}
+                    {...this.props}
                     ref={c => {
                       this._root = c;
                     }}
@@ -67,7 +70,7 @@ const createWithTheme = <T, S>(
                   />
                 );
               } else {
-                element = <Comp {...rest} theme={merged} />;
+                element = <Comp {...this.props} theme={merged} />;
               }
 
               if (merged !== this.props.theme) {
@@ -82,24 +85,23 @@ const createWithTheme = <T, S>(
       }
     }
 
-    let ComponentWithMethods = ThemedComponent;
     if (isClassComponent(Comp)) {
       // getWrappedInstance is exposed by some HOCs like react-redux's connect
       // Use it to get the ref to the underlying element
       // Also expose it to access the underlying element after wrapping
       // $FlowFixMe
-      ComponentWithMethods.prototype.getWrappedInstance = function getWrappedInstance() {
-        return this._root.getWrappedInstance
+      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
+        return this._root && this._root.getWrappedInstance
           ? this._root.getWrappedInstance()
           : this._root;
       };
 
-      ComponentWithMethods = copyRefs(ComponentWithMethods, Comp);
+      ThemedComponent = copyRefs(ThemedComponent, Comp);
     }
 
-    hoistNonReactStatics(ComponentWithMethods, Comp);
+    hoistNonReactStatics(ThemedComponent, Comp);
 
-    return (ComponentWithMethods: any);
+    return (ThemedComponent: any);
   };
 
 export default createWithTheme;

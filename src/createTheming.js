@@ -6,21 +6,21 @@ import createWithTheme from './createWithTheme';
 import type { WithThemeType } from './createWithTheme';
 import type { ThemeProviderType } from './createThemeProvider';
 
-export type ThemingType<T, S> = {
+export type ThemingType<T> = {
   ThemeProvider: ThemeProviderType<T>,
-  withTheme: WithThemeType<T, S>,
+  withTheme: WithThemeType<T>,
 };
 
-export default function createTheming<T, S>(
+export default function createTheming<T: Object>(
   defaultTheme: T
-): ThemingType<T, S> {
+): ThemingType<T> {
   const ThemeContext: Context<T> = createReactContext(defaultTheme);
 
   const ThemeProvider: ThemeProviderType<T> = createThemeProvider(
     defaultTheme,
     ThemeContext
   );
-  const withTheme: WithThemeType<T, S> = createWithTheme(
+  const withTheme: WithThemeType<T> = createWithTheme(
     ThemeProvider,
     ThemeContext
   );

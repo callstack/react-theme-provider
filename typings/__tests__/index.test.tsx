@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createTheming } from "../..";
 
-export type Theme = {
+type Theme = {
   primaryColor: string;
   accentColor: string;
   backgroundColor: string;
@@ -9,11 +9,7 @@ export type Theme = {
   secondaryColor: string;
 };
 
-export type PartialTheme = {
-  primaryColor?: string;
-};
-
-export const themes: { [key: string]: Theme } = {
+const themes: { [key: string]: Theme } = {
   default: {
     primaryColor: "#FFA72A",
     accentColor: "#458622",
@@ -30,7 +26,7 @@ export const themes: { [key: string]: Theme } = {
   }
 };
 
-const { ThemeProvider, withTheme } = createTheming<Theme, PartialTheme>(
+const { ThemeProvider, withTheme } = createTheming<Theme>(
   themes.default
 );
 
