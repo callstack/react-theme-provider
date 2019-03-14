@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 
-import type { Context } from 'create-react-context';
-
 export type ThemeProviderType<T> = React.ComponentType<{
   children: React.Node,
   theme?: T,
@@ -11,7 +9,7 @@ export type ThemeProviderType<T> = React.ComponentType<{
 
 function createThemeProvider<T>(
   defaultTheme: T,
-  ThemeContext: Context<T>
+  ThemeContext: React.Context<T>
 ): ThemeProviderType<T> {
   return class ThemeProvider extends React.Component<*> {
     static defaultProps = {

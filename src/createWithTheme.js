@@ -4,8 +4,6 @@ import * as React from 'react';
 import deepmerge from 'deepmerge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import type { Context } from 'create-react-context';
-
 import { copyRefs } from './utils';
 
 import type { ThemeProviderType } from './createThemeProvider';
@@ -26,7 +24,7 @@ export type WithThemeType<T> = <P, C: React.ComponentType<P>>(
 
 const createWithTheme = <T: Object, S: $DeepShape<T>>(
   ThemeProvider: ThemeProviderType<T>,
-  ThemeContext: Context<T>
+  ThemeContext: React.Context<T>
 ) =>
   function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {

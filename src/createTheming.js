@@ -1,6 +1,6 @@
 /* @flow */
-import createReactContext, { type Context } from 'create-react-context';
 
+import * as React from 'react';
 import createThemeProvider from './createThemeProvider';
 import createWithTheme from './createWithTheme';
 import type { WithThemeType } from './createWithTheme';
@@ -14,7 +14,7 @@ export type ThemingType<T> = {
 export default function createTheming<T: Object>(
   defaultTheme: T
 ): ThemingType<T> {
-  const ThemeContext: Context<T> = createReactContext(defaultTheme);
+  const ThemeContext: React.Context<T> = React.createContext(defaultTheme);
 
   const ThemeProvider: ThemeProviderType<T> = createThemeProvider(
     defaultTheme,
