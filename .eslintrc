@@ -1,3 +1,5 @@
 {
-  "extends": "@callstack/eslint-config"
+  'extends': '@callstack/eslint-config',
+
+  'rules': { 'flowtype/no-weak-types': 'off' },
 }

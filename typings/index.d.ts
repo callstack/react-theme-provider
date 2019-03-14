@@ -13,6 +13,7 @@ export type ThemingType<Theme> = {
   ) => React.ComponentType<
     $Without<Props, 'theme'> & { theme?: $DeepPartial<Theme> }
   >;
+  useTheme(overrides?: $DeepPartial<Theme>): Theme;
 };
 
 export const createTheming: <Theme>(defaultTheme: Theme) => ThemingType<Theme>;

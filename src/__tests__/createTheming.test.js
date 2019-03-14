@@ -28,14 +28,31 @@ describe('createTheming', () => {
 
   const originalTheme = { ...lightTheme };
 
-  const { withTheme, ThemeProvider } = createTheming(darkTheme);
+  const { ThemeProvider, withTheme, useTheme } = createTheming(darkTheme);
 
-  it('provides { theme } props', () => {
+  it('provides theme prop with HOC', () => {
     const PropsChecker = withTheme(({ theme }) => {
       expect(typeof theme).toBe('object');
       expect(theme).toEqual(darkTheme);
       return null;
     });
+
+    ReactDOM.render(
+      <ThemeProvider>
+        <PropsChecker />
+      </ThemeProvider>,
+      node
+    );
+  });
+
+  it('provides theme with hook', () => {
+    const PropsChecker = props => {
+      const theme = useTheme(props.theme);
+
+      expect(typeof theme).toBe('object');
+      expect(theme).toEqual(darkTheme);
+      return null;
+    };
 
     ReactDOM.render(
       <ThemeProvider>
@@ -210,6 +227,30 @@ describe('createTheming', () => {
       });
       return null;
     });
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <PropsChecker
+          theme={{
+            secondaryColor: '#252525',
+          }}
+        />
+      </ThemeProvider>,
+      node
+    );
+  });
+
+  it('merge theme from provider and overrides', () => {
+    const PropsChecker = props => {
+      const theme = useTheme(props.theme);
+
+      expect(theme).not.toBe(lightTheme);
+      expect(theme).toEqual({
+        ...lightTheme,
+        secondaryColor: '#252525',
+      });
+      return null;
+    };
 
     ReactDOM.render(
       <ThemeProvider theme={lightTheme}>

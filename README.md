@@ -8,83 +8,80 @@
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
 
-## About 
+## About
+
 `@callstack/react-theme-provider` is a set of utilities that help you create your own theming system in few easy steps.
 You can use it to customize colors, fonts, etc.
 
 ## Features
- - works in **React** and **React Native**
- - `ThemeProvider` - component
- - `withTheme` - Higher Order Component
- - `createTheming(defaultTheme)` - factory returns `ThemeProvider` component and `withTheme` HOC with default theme injected.
+
+- Works in **React** and **React Native**
+- `createTheming(defaultTheme)` - factory returns:
+  - `ThemeProvider` - component
+  - `withTheme` - Higher Order Component
+  - `useTheme` - React Hook
 
 ## Examples
- - buildin example for web react - ['/examples/web'](/examples/web)
- - [![Edit v6o562k6l7](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/v6o562k6l7)
+
+- built-in example for web react - ['/examples/web'](/examples/web)
+- [![Edit v6o562k6l7](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/v6o562k6l7)
 
 ## Getting started
-### Instalation
-```
+
+### Installation
+
+```sh
 npm install --save @callstack/react-theme-provider
 ```
+
 or using yarn
-```
+
+```sh
 yarn add @callstack/react-theme-provider
 ```
 
 ### Usage
-To use, simply wrap your code into `ThemeProvider` component and pass your theme as a `theme` prop.
+
+Import `createTheming` from the library to create a theming object.
 
 ```js
-<ThemeProvider theme={{ primaryColor: 'red', background: 'gray'}}>
+import { createTheming } from '@callstack/theme-provider';
+
+const { ThemeProvider, withTheme, useTheme } = createTheming(defaultTheme);
+```
+
+Then wrap your code in `ThemeProvider` component to make it available to all components.
+
+```js
+<ThemeProvider>
   <App />
 </ThemeProvider>
 ```
 
-You could access theme data inside every component by wraping it into `withTheme` HOC. Just like this:
+You can access the theme data in your components by wrapping it in `withTheme` HOC:
 
 ```js
 class App extends React.Component {
   render() {
-    return (
-      <div style={{ color: props.theme.primaryColor }}>
-        Hello
-      </div>
-    );
+    return <div style={{ color: props.theme.primaryColor }}>Hello</div>;
   }
 }
 
 export default withTheme(App);
 ```
 
-## `ThemeProvider`
-**type:** 
+You can also use the [hooks](https://reactjs.org/docs/hooks-intro.html) based API:
+
 ```js
-type ThemeProviderType<T> = React.ComponentType<{
-  children?: any,
-  theme: T,
-}>
+function App() {
+  const theme = useTheme();
+
+  return <div style={{ color: theme.primaryColor }}>Hello</div>;
+}
 ```
 
-Component you have to use to provide the theme to any component wrapped in `withTheme` HOC.
+### Usage
 
-### props
- -`theme` - your theme object
-
-## `withTheme`
-**type:** 
-```js
-type WithThemeType<T, S> = <C: React.ComponentType<*>>(
-  Comp: C
-) => C &
-  React.ComponentType<
-    $Diff<React.ElementConfig<C>, { theme: T }> & { theme?: S }
-  >;
-```
-
-Classic Higher Order Component which takes your component as an argument and injects `theme` prop into it.
-
-### Example of usage
 ```js
 const App = ({ theme }) => (
   <div style={{ color: theme.primaryColor }}>
@@ -96,32 +93,37 @@ export withTheme(App);
 ```
 
 ### Injected props
+
 It will inject the following props to the component:
- - `theme` - our theme object.
- - `getWrappedInstance` -  exposed by some HOCs like react-redux's `connect`.
- Use it to get the ref of the underlying element.
+
+- `theme` - our theme object.
+- `getWrappedInstance` - exposed by some HOCs like react-redux's `connect`.
+  Use it to get the ref of the underlying element.
 
 ### Injecting theme by a direct prop
+
 You can also override `theme` provided by `ThemeProvider` by setting `theme` prop on the component wrapped in `withTheme` HOC.
 
 Just like this:
+
 ```js
 const Button = withTheme(({ theme }) => (
-  <div style={{ color: theme.primaryColor }}>
-    Click me
-  </div>
+  <div style={{ color: theme.primaryColor }}>Click me</div>
 ));
 
 const App = () => (
   <ThemeProvider theme={{ primaryColor: 'red' }}>
-    <Button theme= {{ primaryColor: 'green' }}/>
+    <Button theme={{ primaryColor: 'green' }} />
   </ThemeProvider>
-)
+);
 ```
+
 In this example Button will have green text.
 
 ## `createTheming`
-**type:** 
+
+**type:**
+
 ```js
 <T, S>(defaultTheme: T) => {
   ThemeProvider: ThemeProviderType<T>,
@@ -132,21 +134,24 @@ In this example Button will have green text.
 This is more advanced replacement to classic importing `ThemeProvider` and `withTheme` directly from the library.
 Thanks to it you can create your own ThemeProvider with any default theme.
 
-Returns instance of `ThemeProvider` component and `withTheme` HOC. 
+Returns instance of `ThemeProvider` component and `withTheme` HOC.
 You can use this factory to create a singleton with your instances of `ThemeProvider` and `withTheme`.
 
->**Note:** `ThemeProvider` and `withTheme` generated by `createTheming` always will use different context so make sure you are using matching `withTheme`!   
-If you acidentially import `withTheme` from `@callstack/react-theme-provider` instead of your theming instance it won't work.
+> **Note:** `ThemeProvider` and `withTheme` generated by `createTheming` always will use different context so make sure you are using matching `withTheme`!
+> If you acidentially import `withTheme` from `@callstack/react-theme-provider` instead of your theming instance it won't work.
 
 ### Arguments
- - `defaultTheme` - default theme object
+
+- `defaultTheme` - default theme object
 
 ### Benefits
- - Possibility to define `flow` types for your theme
- - Possibility to pass default theme
- - You can use multiple `ThemeProvider`s in your app without any conflicts.
 
-### Example of usage
+- Possibility to define `flow` types for your theme
+- Possibility to pass default theme
+- You can use multiple `ThemeProvider`s in your app without any conflicts.
+
+### Usage
+
 ```js
 // theming.js
 import { createTheming } from '@callstack/react-theme-provider';
@@ -160,7 +165,37 @@ export { ThemeProvider, withTheme };
 import { ThemeProvider, withTheme } from './theming';
 ```
 
+### Helpers
+
+#### `ThemeProvider`
+
+**type:**
+
+```js
+type ThemeProviderType<Theme> = React.ComponentType<{
+  children: React.Node,
+  theme?: Theme,
+}>;
+```
+
+Component you have to use to provide the theme to any component wrapped in `withTheme` HOC.
+
+##### Props
+
+-`theme` - your theme object
+
+#### `withTheme`
+
+**type:**
+
+```js
+type WithThemeType<Theme> = React.ComponentType<{ theme: Theme }>
+```
+
+Higher Order Component which takes your component as an argument and injects `theme` prop into it.
+
 ## Applying a custom theme to a component
+
 If you want to change the theme for a certain component, you can directly pass the theme prop to the component. The theme passed as the prop is merged with the theme from the Provider.
 
 ```js
@@ -168,21 +203,50 @@ import * as React from 'react';
 import MyButton from './MyButton';
 
 export default function ButtonExample() {
-  return (
-    <MyButton theme={{ roundness: 3 }}>
-      Press me
-    </MyButton>
-  );
+  return <MyButton theme={{ roundness: 3 }}>Press me</MyButton>;
+}
+```
+
+#### `useTheme`
+
+**type:**
+
+```js
+type UseTheme = (overrides?: PartialTheme) => Theme;
+```
+
+Hook which takes theme overrides and returns a theme object.
+
+Example:
+
+```js
+function App(props) {
+  const theme = useTheme(props.theme);
+
+  return <div style={{ color: theme.primaryColor }}>Hello</div>;
+}
+```
+
+## Applying a custom theme to a component
+
+If you want to change the theme for a certain component, you can directly pass the theme prop to the component. The theme passed as the prop is merged with the theme from the Provider.
+
+```js
+import * as React from 'react';
+import MyButton from './MyButton';
+
+export default function ButtonExample() {
+  return <MyButton theme={{ roundness: 3 }}>Press me</MyButton>;
 }
 ```
 
 ## Gotchas
-The `ThemeProvider` exposes the theme to the components via [React's context API](https://reactjs.org/docs/context.html), 
-which means that the component must be in the same tree as the `ThemeProvider`. Some React Native components will render a 
-different tree such as a `Modal`, in which case the components inside the `Modal` won't be able to access the theme. The work 
-around is to get the theme using the `withTheme` HOC and pass it down to the components as props, or expose it again with the 
-exported `ThemeProvider` component.
 
+The `ThemeProvider` exposes the theme to the components via [React's context API](https://reactjs.org/docs/context.html),
+which means that the component must be in the same tree as the `ThemeProvider`. Some React Native components will render a
+different tree such as a `Modal`, in which case the components inside the `Modal` won't be able to access the theme. The work
+around is to get the theme using the `withTheme` HOC and pass it down to the components as props, or expose it again with the
+exported `ThemeProvider` component.
 
 [build-badge]: https://img.shields.io/circleci/project/github/callstack/react-theme-provider/master.svg?style=flat-square
 [build]: https://circleci.com/gh/callstack/react-theme-provider

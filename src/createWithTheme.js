@@ -7,10 +7,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import { copyRefs } from './utils';
 
 import type { ThemeProviderType } from './createThemeProvider';
-
-type $DeepShape<O: Object> = $Shape<
-  $ObjMap<O, (<V: Object>(V) => $DeepShape<V>) & (<V>(V) => V)>
->;
+import type { $DeepShape } from './types';
 
 const isClassComponent = (Component: any) =>
   Boolean(Component.prototype && Component.prototype.isReactComponent);
