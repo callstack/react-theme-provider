@@ -13,10 +13,7 @@ export type ThemingType<Theme> = {
   ) => React.ComponentType<
     $Without<Props, 'theme'> & { theme?: $DeepPartial<Theme> }
   >;
+  useTheme(overrides?: $DeepPartial<Theme>): Theme;
 };
-
-// Library exports
-export const ThemeProvider: ThemingType<object>['ThemeProvider'];
-export const withTheme: ThemingType<object>['withTheme'];
 
 export const createTheming: <Theme>(defaultTheme: Theme) => ThemingType<Theme>;

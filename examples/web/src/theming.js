@@ -1,7 +1,6 @@
 /* @flow */
-import { createTheming } from '@callstack/react-theme-provider';
 
-import type { ThemingType } from '@callstack/react-theme-provider';
+import { createTheming, type ThemingType } from '@callstack/react-theme-provider';
 
 export type Theme = {
   primaryColor: string,
@@ -28,7 +27,7 @@ export const themes: { [key: string]: Theme } = {
   },
 };
 
-const { ThemeProvider, withTheme }: ThemingType<Theme, $Shape<Theme>> = createTheming(
+const { ThemeProvider, withTheme }: ThemingType<Theme> = createTheming(
   themes.default
 );
 

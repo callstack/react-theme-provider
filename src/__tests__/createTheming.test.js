@@ -28,14 +28,31 @@ describe('createTheming', () => {
 
   const originalTheme = { ...lightTheme };
 
-  const { withTheme, ThemeProvider } = createTheming(darkTheme);
+  const { ThemeProvider, withTheme, useTheme } = createTheming(darkTheme);
 
-  it('provides { theme } props', () => {
+  it('provides theme prop with HOC', () => {
     const PropsChecker = withTheme(({ theme }) => {
       expect(typeof theme).toBe('object');
       expect(theme).toEqual(darkTheme);
       return null;
     });
+
+    ReactDOM.render(
+      <ThemeProvider>
+        <PropsChecker />
+      </ThemeProvider>,
+      node
+    );
+  });
+
+  it('provides theme with hook', () => {
+    const PropsChecker = props => {
+      const theme = useTheme(props.theme);
+
+      expect(typeof theme).toBe('object');
+      expect(theme).toEqual(darkTheme);
+      return null;
+    };
 
     ReactDOM.render(
       <ThemeProvider>
@@ -116,6 +133,7 @@ describe('createTheming', () => {
         expect(typeof this.comp.foo).toEqual('function');
         expect(this.comp.foo()).toEqual('bar');
       }
+
       render() {
         return (
           <WithThemeComponent
@@ -173,6 +191,7 @@ describe('createTheming', () => {
         );
         expect(this.compWithoutGWI.getWrappedInstance().foo()).toEqual('bar');
       }
+
       render() {
         return (
           <Fragment>
@@ -221,6 +240,30 @@ describe('createTheming', () => {
     );
   });
 
+  it('merge theme from provider and overrides', () => {
+    const PropsChecker = props => {
+      const theme = useTheme(props.theme);
+
+      expect(theme).not.toBe(lightTheme);
+      expect(theme).toEqual({
+        ...lightTheme,
+        secondaryColor: '#252525',
+      });
+      return null;
+    };
+
+    ReactDOM.render(
+      <ThemeProvider theme={lightTheme}>
+        <PropsChecker
+          theme={{
+            secondaryColor: '#252525',
+          }}
+        />
+      </ThemeProvider>,
+      node
+    );
+  });
+
   it('rerender component if theme props changed', () => {
     const render = jest.fn(() => null);
     class Checker extends React.Component {
@@ -243,7 +286,7 @@ describe('createTheming', () => {
       </ThemeProvider>,
       node
     );
-    expect(render.mock.calls.length).toEqual(2);
+    expect(render.mock.calls).toHaveLength(2);
   });
 
   it('doesnt mutate existing theme', () => {

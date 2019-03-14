@@ -4,15 +4,10 @@ import * as React from 'react';
 import deepmerge from 'deepmerge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import type { Context } from 'create-react-context';
-
 import { copyRefs } from './utils';
 
 import type { ThemeProviderType } from './createThemeProvider';
-
-type $DeepShape<O: Object> = $Shape<
-  $ObjMap<O, (<V: Object>(V) => $DeepShape<V>) & (<V>(V) => V)>
->;
+import type { $DeepShape } from './types';
 
 const isClassComponent = (Component: any) =>
   Boolean(Component.prototype && Component.prototype.isReactComponent);
@@ -26,14 +21,14 @@ export type WithThemeType<T> = <P, C: React.ComponentType<P>>(
 
 const createWithTheme = <T: Object, S: $DeepShape<T>>(
   ThemeProvider: ThemeProviderType<T>,
-  ThemeContext: Context<T>
+  ThemeContext: React.Context<T>
 ) =>
   function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {
-      /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
       _previous: ?{ a: T, b: ?S, result: T };
+
       _merge = (a: T, b: ?S) => {
         const previous = this._previous;
 
