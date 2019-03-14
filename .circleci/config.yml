@@ -34,7 +34,7 @@ aliases:
 
 defaults: &defaults
   working_directory: ~/react-theme-provider
-  docker: 
+  docker:
     - image: circleci/node:8
 
 version: 2
@@ -60,9 +60,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/react-theme-provider
-      - run: yarn run lint
-      - run: yarn run flow
-      - run: yarn run typescript
+      - run: yarn lint
+      - run: yarn flow
+      - run: yarn typescript
       - store_artifacts:
           path: coverage
   build:
@@ -70,7 +70,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/react-theme-provider
-      - run: yarn build
+      - run: yarn prepare
   deploy:
     <<: *defaults
     steps:
@@ -82,7 +82,7 @@ jobs:
 workflows:
   version: 2
 
-  build: 
+  build:
     jobs:
       - install-dependencies
       - tests:
@@ -94,6 +94,6 @@ workflows:
             - tests
           filters: *filter-ignore-gh-pages
       - deploy:
-          requires: 
+          requires:
             - build
-          filters: *filter-tag  
+          filters: *filter-tag
