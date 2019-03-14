@@ -1,6 +1,6 @@
 {
   "name": "@callstack/react-theme-provider",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Theme provider for react and react-naitve applications",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
@@ -61,6 +61,9 @@
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
-    "testPathIgnorePatterns": ["/node_modules/", "/typings/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/typings/"
+    ]
   }
 }
