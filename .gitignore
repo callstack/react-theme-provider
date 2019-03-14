@@ -7,7 +7,6 @@ lib/
 # VSCode
 #
 .vscode/
-tsconfig.json
 jsconfig.json
 
 # node.js

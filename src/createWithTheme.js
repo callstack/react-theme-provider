@@ -28,10 +28,10 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
 ) =>
   function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {
-      /* $FlowFixMe */
       static displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
       _previous: ?{ a: T, b: ?S, result: T };
+
       _merge = (a: T, b: ?S) => {
         const previous = this._previous;
 

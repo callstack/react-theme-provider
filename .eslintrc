@@ -1,7 +1,3 @@
 {
-  "extends": "callstack-io",
-  "rules": {
-    "react/forbid-prop-types": 0,
-    "flowtype/no-weak-types": 0
-  }
+  "extends": "@callstack/eslint-config"
 }

@@ -15,8 +15,4 @@ export type ThemingType<Theme> = {
   >;
 };
 
-// Library exports
-export const ThemeProvider: ThemingType<object>['ThemeProvider'];
-export const withTheme: ThemingType<object>['withTheme'];
-
 export const createTheming: <Theme>(defaultTheme: Theme) => ThemingType<Theme>;

@@ -1,6 +1,4 @@
 [ignore]
-.*/dist/.*
-.*/examples/.*
 .*/lib/.*
 
 [include]
@@ -11,6 +9,8 @@
 emoji=true
 
 munge_underscores=true
+
+module.name_mapper='^@callstack/react-theme-provider' -> '<PROJECT_ROOT>/src'
 
 [version]
 ^0.94.0

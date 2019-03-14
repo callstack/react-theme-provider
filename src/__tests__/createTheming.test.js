@@ -116,6 +116,7 @@ describe('createTheming', () => {
         expect(typeof this.comp.foo).toEqual('function');
         expect(this.comp.foo()).toEqual('bar');
       }
+
       render() {
         return (
           <WithThemeComponent
@@ -173,6 +174,7 @@ describe('createTheming', () => {
         );
         expect(this.compWithoutGWI.getWrappedInstance().foo()).toEqual('bar');
       }
+
       render() {
         return (
           <Fragment>
@@ -243,7 +245,7 @@ describe('createTheming', () => {
       </ThemeProvider>,
       node
     );
-    expect(render.mock.calls.length).toEqual(2);
+    expect(render.mock.calls).toHaveLength(2);
   });
 
   it('doesnt mutate existing theme', () => {
