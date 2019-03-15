@@ -1,5 +1,6 @@
 /* eslint-disable react/no-multi-comp */
-import React, { Fragment } from 'react';
+
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import createTheming from '../createTheming';
 
@@ -25,8 +26,6 @@ describe('createTheming', () => {
     textColor: '#FFa7af',
     secondaryColor: '#ffffff',
   };
-
-  const originalTheme = { ...lightTheme };
 
   const { ThemeProvider, withTheme, useTheme } = createTheming(darkTheme);
 
@@ -115,7 +114,7 @@ describe('createTheming', () => {
     );
   });
 
-  it('allows to use ref on wrapped component', () => {
+  it('sets correct ref on wrapped component', () => {
     class Component extends React.Component {
       foo() {
         return 'bar';
@@ -125,12 +124,11 @@ describe('createTheming', () => {
         return null;
       }
     }
+
     const WithThemeComponent = withTheme(Component);
 
     class Wrapper extends React.Component {
       componentDidMount() {
-        expect(typeof this.comp).toBe('object');
-        expect(typeof this.comp.foo).toEqual('function');
         expect(this.comp.foo()).toEqual('bar');
       }
 
@@ -141,71 +139,6 @@ describe('createTheming', () => {
               this.comp = component;
             }}
           />
-        );
-      }
-    }
-
-    ReactDOM.render(
-      <ThemeProvider>
-        <Wrapper />
-      </ThemeProvider>,
-      node
-    );
-  });
-
-  it('Should set properly getWrappedInstance method', () => {
-    class Component extends React.Component {
-      foo() {
-        return 'bar';
-      }
-
-      getWrappedInstance() {
-        return this;
-      }
-
-      render() {
-        return null;
-      }
-    }
-    class ComponentWithoutGWI extends React.Component {
-      foo() {
-        return 'bar';
-      }
-
-      render() {
-        return null;
-      }
-    }
-    const WithThemeComponent = withTheme(Component);
-    const WithThemeComponentWithoutGWI = withTheme(ComponentWithoutGWI);
-
-    class Wrapper extends React.Component {
-      componentDidMount() {
-        expect(typeof this.comp).toBe('object');
-        expect(typeof this.comp.getWrappedInstance).toEqual('function');
-        expect(this.comp.getWrappedInstance().foo()).toEqual('bar');
-
-        expect(typeof this.compWithoutGWI).toBe('object');
-        expect(typeof this.compWithoutGWI.getWrappedInstance).toEqual(
-          'function'
-        );
-        expect(this.compWithoutGWI.getWrappedInstance().foo()).toEqual('bar');
-      }
-
-      render() {
-        return (
-          <Fragment>
-            <WithThemeComponent
-              ref={component => {
-                this.comp = component;
-              }}
-            />
-            <WithThemeComponentWithoutGWI
-              ref={component => {
-                this.compWithoutGWI = component;
-              }}
-            />
-          </Fragment>
         );
       }
     }
@@ -290,18 +223,17 @@ describe('createTheming', () => {
   });
 
   it('doesnt mutate existing theme', () => {
+    const overrides = { primaryColor: 'red' };
     const Checker1 = withTheme(({ theme }) => {
-      expect(theme).toEqual({
-        ...lightTheme,
-        primaryColor: 'red',
-      });
+      expect(theme).not.toBe(lightTheme);
+      expect(theme).not.toBe(overrides);
       return null;
     });
 
     const Checker1WithTheme = withTheme(Checker1);
 
     const Checker2 = withTheme(({ theme }) => {
-      expect(theme).toEqual(originalTheme);
+      expect(theme).toBe(lightTheme);
       return null;
     });
 
@@ -309,7 +241,7 @@ describe('createTheming', () => {
 
     ReactDOM.render(
       <ThemeProvider theme={lightTheme}>
-        <Checker1WithTheme theme={{ primaryColor: 'red' }} />
+        <Checker1WithTheme theme={overrides} />
         <Checker2WithTheme />
       </ThemeProvider>,
       node
