@@ -11,6 +11,7 @@ import type { $DeepShape } from './types';
 export type ThemingType<T> = {
   ThemeProvider: ThemeProviderType<T>,
   withTheme: WithThemeType<T>,
+  useTheme(overrides?: $DeepShape<T>): T,
 };
 
 export default function createTheming<T: Object>(
