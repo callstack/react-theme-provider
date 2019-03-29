@@ -4,13 +4,8 @@ import * as React from 'react';
 import deepmerge from 'deepmerge';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import { copyRefs } from './utils';
-
 import type { ThemeProviderType } from './createThemeProvider';
 import type { $DeepShape } from './types';
-
-const isClassComponent = (Component: any) =>
-  Boolean(Component.prototype && Component.prototype.isReactComponent);
 
 export type WithThemeType<T> = <P, C: React.ComponentType<P>>(
   Comp: C
@@ -25,8 +20,6 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
 ) =>
   function withTheme(Comp: *) {
     class ThemedComponent extends React.Component<*> {
-      static displayName = `withTheme(${Comp.displayName || Comp.name})`;
-
       _previous: ?{ a: T, b: ?S, result: T };
 
       _merge = (a: T, b: ?S) => {
@@ -36,39 +29,29 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
           return previous.result;
         }
 
-        const result = a && b ? deepmerge(a, b) : a || b;
+        const result = a && b && a !== b ? deepmerge(a, b) : a || b;
 
         this._previous = { a, b, result };
 
         return result;
       };
 
-      _root: any;
-
       render() {
+        const { _reactThemeProviderForwardedRef, ...rest } = this.props;
+
         return (
           <ThemeContext.Consumer>
             {theme => {
-              const merged = this._merge(theme, this.props.theme);
+              const merged = this._merge(theme, rest.theme);
+              const element = (
+                <Comp
+                  {...rest}
+                  theme={merged}
+                  ref={_reactThemeProviderForwardedRef}
+                />
+              );
 
-              let element;
-              if (isClassComponent(Comp)) {
-                // Only add refs for class components as function components don't support them
-                // It's needed to support use cases which need access to the underlying node
-                element = (
-                  <Comp
-                    {...this.props}
-                    ref={c => {
-                      this._root = c;
-                    }}
-                    theme={merged}
-                  />
-                );
-              } else {
-                element = <Comp {...this.props} theme={merged} />;
-              }
-
-              if (merged !== this.props.theme) {
+              if (rest.theme && merged !== rest.theme) {
                 // If a theme prop was passed, expose it to the children
                 return <ThemeProvider theme={merged}>{element}</ThemeProvider>;
               }
@@ -80,23 +63,15 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
       }
     }
 
-    if (isClassComponent(Comp)) {
-      // getWrappedInstance is exposed by some HOCs like react-redux's connect
-      // Use it to get the ref to the underlying element
-      // Also expose it to access the underlying element after wrapping
-      // $FlowFixMe
-      ThemedComponent.prototype.getWrappedInstance = function getWrappedInstance() {
-        return this._root && this._root.getWrappedInstance
-          ? this._root.getWrappedInstance()
-          : this._root;
-      };
+    const ResultComponent = React.forwardRef((props, ref) => (
+      <ThemedComponent {...props} _reactThemeProviderForwardedRef={ref} />
+    ));
 
-      ThemedComponent = copyRefs(ThemedComponent, Comp);
-    }
+    ResultComponent.displayName = `withTheme(${Comp.displayName || Comp.name})`;
 
-    hoistNonReactStatics(ThemedComponent, Comp);
+    hoistNonReactStatics(ResultComponent, Comp);
 
-    return (ThemedComponent: any);
+    return (ResultComponent: any);
   };
 
 export default createWithTheme;
