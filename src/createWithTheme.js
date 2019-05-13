@@ -41,23 +41,13 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
 
         return (
           <ThemeContext.Consumer>
-            {theme => {
-              const merged = this._merge(theme, rest.theme);
-              const element = (
-                <Comp
-                  {...rest}
-                  theme={merged}
-                  ref={_reactThemeProviderForwardedRef}
-                />
-              );
-
-              if (rest.theme && merged !== rest.theme) {
-                // If a theme prop was passed, expose it to the children
-                return <ThemeProvider theme={merged}>{element}</ThemeProvider>;
-              }
-
-              return element;
-            }}
+            {theme => (
+              <Comp
+                {...rest}
+                theme={this._merge(theme, rest.theme)}
+                ref={_reactThemeProviderForwardedRef}
+              />
+            )}
           </ThemeContext.Consumer>
         );
       }
