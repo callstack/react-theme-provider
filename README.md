@@ -45,7 +45,7 @@ yarn add @callstack/react-theme-provider
 Import `createTheming` from the library to create a theming object.
 
 ```js
-import { createTheming } from '@callstack/theme-provider';
+import { createTheming } from '@callstack/react-theme-provider';
 
 const { ThemeProvider, withTheme, useTheme } = createTheming(defaultTheme);
 ```
