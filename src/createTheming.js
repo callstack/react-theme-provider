@@ -41,6 +41,7 @@ export default function createTheming<T: Object>(
   };
 
   return {
+    ThemeContext,
     ThemeProvider,
     withTheme,
     useTheme,
