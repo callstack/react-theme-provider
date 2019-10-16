@@ -2,7 +2,7 @@
 // TypeScript version 3.0.3
 
 import * as React from 'react';
-import hoistNonReactStatics = require('hoist-non-react-statics');
+import hoistNonReactStatics = require('./hoist-non-react-statics');
 
 type $Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 type $DeepPartial<T> = { [P in keyof T]?: $DeepPartial<T[P]> };
