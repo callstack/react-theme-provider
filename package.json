@@ -54,7 +54,6 @@
     "react": "^16.3.0"
   },
   "dependencies": {
-    "@types/hoist-non-react-statics": "^3.3.1",
     "deepmerge": "^3.2.0",
     "hoist-non-react-statics": "^3.3.0"
   },
