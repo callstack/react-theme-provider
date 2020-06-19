@@ -25,12 +25,17 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
       _merge = (a: T, b: ?S, c: ?S) => {
         const previous = this._previous;
 
-        if (previous && previous.a === a && previous.b === b && previous.c === c) {
+        if (
+          previous &&
+          previous.a === a &&
+          previous.b === b &&
+          previous.c === c
+        ) {
           return previous.result;
         }
 
         let result = a && b && a !== b ? deepmerge(a, b) : a || b;
-        result = result && c && result !== c ? deepmerge(result, c) : result || c;
+        result = c && result !== c ? deepmerge(result, c) : result;
 
         this._previous = { a, b, c, result };
 
