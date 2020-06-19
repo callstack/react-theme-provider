@@ -18,7 +18,7 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
   ThemeProvider: ThemeProviderType<T>,
   ThemeContext: React.Context<T>
 ) =>
-  function withTheme(Comp: *) {
+  function withTheme(Comp: *, themeOverride = {}) {
     class ThemedComponent extends React.Component<*> {
       _previous: ?{ a: T, b: ?S, result: T };
 
@@ -44,7 +44,7 @@ const createWithTheme = <T: Object, S: $DeepShape<T>>(
             {theme => (
               <Comp
                 {...rest}
-                theme={this._merge(theme, rest.theme)}
+                theme={this._merge(theme, rest.theme, themeOverride)}
                 ref={_reactThemeProviderForwardedRef}
               />
             )}
