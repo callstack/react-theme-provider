@@ -12,7 +12,7 @@ export type ThemingType<Theme> = {
   withTheme: <Props extends { theme: Theme }, C>(
     WrappedComponent: React.ComponentType<Props> & C
   ) => React.ComponentType<
-    $Without<Props, 'theme'> & { theme?: $DeepPartial<Theme> }
+    $Without<Props, 'theme'> & React.HTMLProps<HTMLElement> & { theme?: $DeepPartial<Theme> }
   > &
     hoistNonReactStatics.NonReactStatics<typeof WrappedComponent>;
   useTheme(overrides?: $DeepPartial<Theme>): Theme;
