@@ -70,17 +70,7 @@ class App extends React.Component {
 export default withTheme(App);
 ```
 
-You can also use the [hooks](https://reactjs.org/docs/hooks-intro.html) based API:
-
-```js
-function App() {
-  const theme = useTheme();
-
-  return <div style={{ color: theme.primaryColor }}>Hello</div>;
-}
-```
-
-### Usage
+Another usage for functional component:
 
 ```js
 const App = ({ theme }) => (
@@ -90,6 +80,16 @@ const App = ({ theme }) => (
 );
 
 export withTheme(App);
+```
+
+You can also use the [hooks](https://reactjs.org/docs/hooks-intro.html) based API:
+
+```js
+function App() {
+  const theme = useTheme();
+
+  return <div style={{ color: theme.primaryColor }}>Hello</div>;
+}
 ```
 
 ### Injected props
@@ -193,19 +193,6 @@ type WithThemeType<Theme> = React.ComponentType<{ theme: Theme }>
 ```
 
 Higher Order Component which takes your component as an argument and injects `theme` prop into it.
-
-## Applying a custom theme to a component
-
-If you want to change the theme for a certain component, you can directly pass the theme prop to the component. The theme passed as the prop is merged with the theme from the Provider.
-
-```js
-import * as React from 'react';
-import MyButton from './MyButton';
-
-export default function ButtonExample() {
-  return <MyButton theme={{ roundness: 3 }}>Press me</MyButton>;
-}
-```
 
 #### `useTheme`
 
