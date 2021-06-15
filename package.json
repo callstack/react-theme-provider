@@ -1,7 +1,7 @@
 {
   "name": "@callstack/react-theme-provider",
   "version": "3.0.6",
-  "description": "Theme provider for react and react-naitve applications",
+  "description": "Theme provider for react and react-native applications",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
   "files": [
