@@ -51,7 +51,7 @@
     "typescript": "^3.3.3333"
   },
   "peerDependencies": {
-    "react": "^16.3.0"
+    "react": ">=16.3.0"
   },
   "dependencies": {
     "deepmerge": "^3.2.0",
