@@ -1,0 +1,23 @@
+name: Update package version
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New package version'
+        required: true
+        default: ''
+jobs:
+  update_package_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: git config --global user.email "bot@callstack.io"
+      - run: git config --global user.name "${{ github.actor }}"
+      - run: yarn version --new-version ${{ github.event.inputs.version }}
+      - run: git push --tags
+      - run: git push
