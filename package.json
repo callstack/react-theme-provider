@@ -1,7 +1,7 @@
 {
   "name": "@callstack/react-theme-provider",
-  "version": "2.1.0",
-  "description": "Theme provider for react and react-naitve applications",
+  "version": "3.0.7",
+  "description": "Theme provider for react and react-native applications",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
   "files": [
@@ -51,7 +51,7 @@
     "typescript": "^3.3.3333"
   },
   "peerDependencies": {
-    "react": "^16.3.0"
+    "react": ">=16.3.0"
   },
   "dependencies": {
     "deepmerge": "^3.2.0",

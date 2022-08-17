@@ -4,7 +4,7 @@
 import * as React from 'react';
 import hoistNonReactStatics = require('./hoist-non-react-statics');
 
-type $Without<T, K> = Pick<T, Exclude<keyof T, K>>;
+type $Without<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
 type $DeepPartial<T> = { [P in keyof T]?: $DeepPartial<T[P]> };
 
 export type ThemingType<Theme> = {

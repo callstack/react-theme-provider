@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withTheme } from './theming';
 
-const Header = ({ theme, themes, onChangeTheme }) => (
+const ThemeChanger = ({ theme, themes, onChangeTheme }) => (
   <Container textColor={theme.primaryColor} background={theme.secondaryColor}>
     CHANGE THEME:{' '}
     <select onChange={e => onChangeTheme(e.target.value)}>
@@ -24,4 +24,4 @@ const Container = styled.div`
   text-align: center;
 `;
 
-export default withTheme(Header);
+export default withTheme(ThemeChanger);
