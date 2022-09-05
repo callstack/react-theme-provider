@@ -15,7 +15,7 @@ export type ThemingType<Theme> = {
     $Without<Props, 'theme'> & { theme?: $DeepPartial<Theme> }
   > &
     hoistNonReactStatics.NonReactStatics<typeof WrappedComponent>;
-  useTheme(overrides?: $DeepPartial<Theme>): Theme;
+  useTheme<T = Theme>(overrides?: $DeepPartial<T>): T;
 };
 
 export const createTheming: <Theme>(defaultTheme: Theme) => ThemingType<Theme>;
