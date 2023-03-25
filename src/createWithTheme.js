@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import deepmerge from 'deepmerge';
+import { deepmerge } from 'deepmerge-ts';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import type { ThemeProviderType } from './createThemeProvider';
