@@ -35,7 +35,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/react-theme-provider
   docker:
-    - image: circleci/node:8
+    - image: circleci/node:16
 
 version: 2
 jobs:
