@@ -8,7 +8,7 @@ type $Without<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T,
 type $DeepPartial<T> = { [P in keyof T]?: $DeepPartial<T[P]> };
 
 export type ThemingType<Theme> = {
-  ThemeProvider: React.ComponentType<{ theme?: Theme }>;
+  ThemeProvider: React.ComponentType<{children: React.ReactNode, theme?: Theme }>;
   withTheme: <Props extends { theme: Theme }, C>(
     WrappedComponent: React.ComponentType<Props> & C
   ) => React.ComponentType<
