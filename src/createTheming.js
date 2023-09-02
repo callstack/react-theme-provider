@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import deepmerge from 'deepmerge';
+import { deepmerge } from 'deepmerge-ts';
 import createThemeProvider from './createThemeProvider';
 import createWithTheme from './createWithTheme';
 import type { WithThemeType } from './createWithTheme';
